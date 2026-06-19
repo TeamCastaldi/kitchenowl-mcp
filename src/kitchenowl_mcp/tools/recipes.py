@@ -68,6 +68,7 @@ async def create_recipe(
         items.append(
             {
                 "id": resolved["id"],
+                "name": resolved.get("name", ingredient_name.strip()),
                 "description": "",
                 "optional": False,
                 "ordering": idx,
