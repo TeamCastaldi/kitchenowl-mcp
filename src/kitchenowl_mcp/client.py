@@ -53,26 +53,39 @@ class KitchenOwlClient:
         r.raise_for_status()
         return r.json()
 
+    async def update_recipe(self, recipe_id: int, payload: dict) -> dict:
+        r = await self._http.post(f"{self._base}/api/recipe/{recipe_id}", json=payload)
+        r.raise_for_status()
+        return r.json()
+
+    async def delete_recipe(self, recipe_id: int) -> None:
+        r = await self._http.delete(f"{self._base}/api/recipe/{recipe_id}")
+        r.raise_for_status()
+
     async def get_shopping_list_items(self, list_id: int) -> list[dict]:
         url = f"{self._base}/api/household/{self._household}/shoppinglist"
         r = await self._http.get(url)
         r.raise_for_status()
-        lists = r.json()
+        data = r.json()
+        lists: list[dict] = data if isinstance(data, list) else []
         for shopping_list in lists:
             if shopping_list.get("id") == list_id:
                 return shopping_list.get("items", [])
         return []
 
     async def add_shopping_item(self, list_id: int, item: dict) -> dict:
-        url = f"{self._base}/api/household/{self._household}/item"
-        payload = {**item, "shoppinglist": list_id}
+        url = f"{self._base}/api/shoppinglist/{list_id}/add-item-by-name"
+        description = f"{item.get('amount', '')} {item.get('unit', '')}".strip()
+        payload = {"name": item.get("name", "")}
+        if description:
+            payload["description"] = description
         r = await self._http.post(url, json=payload)
         r.raise_for_status()
         return r.json()
 
     async def remove_shopping_item(self, list_id: int, item_id: int) -> None:
-        url = f"{self._base}/api/household/{self._household}/item/{item_id}"
-        r = await self._http.delete(url)
+        url = f"{self._base}/api/shoppinglist/{list_id}/item"
+        r = await self._http.request("DELETE", url, json={"item_id": item_id})
         r.raise_for_status()
 
     async def get_planner(self) -> list[dict]:
@@ -102,15 +115,6 @@ class KitchenOwlClient:
         r = await self._http.post(url, json=payload)
         r.raise_for_status()
         return r.json()
-
-    async def update_recipe(self, recipe_id: int, payload: dict) -> dict:
-        r = await self._http.post(f"{self._base}/api/recipe/{recipe_id}", json=payload)
-        r.raise_for_status()
-        return r.json()
-
-    async def delete_recipe(self, recipe_id: int) -> None:
-        r = await self._http.delete(f"{self._base}/api/recipe/{recipe_id}")
-        r.raise_for_status()
 
     async def list_tags(self) -> list[dict]:
         url = f"{self._base}/api/household/{self._household}/tag"
