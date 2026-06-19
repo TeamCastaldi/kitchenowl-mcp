@@ -48,10 +48,15 @@ class KitchenOwlClient:
         return r.json()
 
     async def create_recipe(self, payload: dict) -> dict:
+        import json as _json
+
         url = f"{self._base}/api/household/{self._household}/recipe"
         r = await self._http.post(url, json=payload)
         if r.is_error:
-            raise Exception(f"KitchenOwl {r.status_code} on POST /recipe: {r.text}")
+            raise Exception(
+                f"KitchenOwl {r.status_code} on POST /recipe: {r.text}"
+                f" | sent: {_json.dumps(payload)}"
+            )
         return r.json()
 
     async def get_shopping_list_items(self, list_id: int) -> list[dict]:
