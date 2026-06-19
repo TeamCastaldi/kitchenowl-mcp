@@ -118,3 +118,8 @@ class KitchenOwlClient:
         r.raise_for_status()
         data = r.json()
         return data.get("tags", data) if isinstance(data, dict) else data
+
+    async def cook_recipe(self, recipe_id: int) -> dict:
+        r = await self._http.post(f"{self._base}/api/recipe/{recipe_id}/cook")
+        r.raise_for_status()
+        return r.json()

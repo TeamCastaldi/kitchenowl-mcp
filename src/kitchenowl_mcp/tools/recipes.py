@@ -168,6 +168,25 @@ async def update_recipe(
     return await client.update_recipe(recipe_id, payload)
 
 
+async def list_tags() -> list[dict]:
+    """List all recipe tags defined in this KitchenOwl household.
+
+    Returns a list of tag objects with id and name.
+    Use the name strings with search_recipes(tags=[...]) or create_recipe(tags=[...]).
+    """
+    return await state.get_client().list_tags()
+
+
+async def mark_recipe_made(recipe_id: int) -> dict:
+    """Record that a recipe was just cooked.
+
+    Increments the cook count and logs the timestamp in KitchenOwl's
+    cooking history. Use search_recipes() to find the recipe_id.
+    Returns the updated recipe.
+    """
+    return await state.get_client().cook_recipe(recipe_id)
+
+
 async def delete_recipe(recipe_id: int) -> dict:
     """Delete a recipe by ID.
 

@@ -43,6 +43,8 @@ mcp.add_tool(recipes.get_recipe)
 mcp.add_tool(recipes.create_recipe)
 mcp.add_tool(recipes.update_recipe)
 mcp.add_tool(recipes.delete_recipe)
+mcp.add_tool(recipes.list_tags)
+mcp.add_tool(recipes.mark_recipe_made)
 
 # Shopping list
 mcp.add_tool(shopping.get_shopping_list)
