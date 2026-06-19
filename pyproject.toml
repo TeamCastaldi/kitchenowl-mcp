@@ -9,6 +9,9 @@ dependencies = [
     "pydantic-settings>=2.0.0",
 ]
 
+[project.optional-dependencies]
+dev = ["pytest>=8.0.0"]
+
 [project.scripts]
 kitchenowl-mcp = "kitchenowl_mcp.server:main"
 
