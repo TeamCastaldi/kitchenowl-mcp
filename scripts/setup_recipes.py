@@ -10,9 +10,8 @@ import sys
 
 sys.path.insert(0, "src")
 
-from kitchenowl_mcp.config import get_settings
 from kitchenowl_mcp.client import KitchenOwlClient
-
+from kitchenowl_mcp.config import get_settings
 
 STUB_IDS = [1, 2, 6]
 STUB_NAMES = {
