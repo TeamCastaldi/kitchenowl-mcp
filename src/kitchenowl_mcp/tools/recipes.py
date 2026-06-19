@@ -48,36 +48,15 @@ async def create_recipe(
     """
     client = state.get_client()
 
-    catalog = await client.list_items() if ingredients else []
-    catalog_by_key: dict[str, dict] = {}
-    for item in catalog:
-        catalog_by_key[item.get("name", "").lower()] = item
-        catalog_by_key[item.get("default_key", "").lower()] = item
-
-    items = []
-    for idx, ingredient_name in enumerate(ingredients or []):
-        lookup_key = ingredient_name.lower().strip()
-        resolved = catalog_by_key.get(lookup_key)
-        if resolved is None:
-            resolved = await client.create_item(
-                {
-                    "name": ingredient_name.strip(),
-                    "default_key": lookup_key.replace(" ", "_"),
-                }
-            )
-        items.append(
-            {
-                "id": resolved.get("id"),
-                "name": resolved.get("name", ingredient_name),
-                "default_key": resolved.get("default_key", lookup_key),
-                "household_id": resolved.get("household_id"),
-                "icon": resolved.get("icon", ""),
-                "category_id": resolved.get("category_id"),
-                "optional": False,
-                "ordering": idx,
-                "description": "",
-            }
-        )
+    items = [
+        {
+            "name": ingredient.strip(),
+            "description": "",
+            "optional": False,
+            "ordering": idx,
+        }
+        for idx, ingredient in enumerate(ingredients or [])
+    ]
 
     payload: dict = {
         "name": name,
