@@ -54,25 +54,24 @@ class KitchenOwlClient:
         return r.json()
 
     async def get_shopping_list_items(self, list_id: int) -> list[dict]:
-        url = f"{self._base}/api/household/{self._household}/shoppinglist/{list_id}"
+        url = f"{self._base}/api/household/{self._household}/shoppinglist"
         r = await self._http.get(url)
         r.raise_for_status()
-        data = r.json()
-        return data.get("items", data) if isinstance(data, dict) else data
+        lists = r.json()
+        for shopping_list in lists:
+            if shopping_list.get("id") == list_id:
+                return shopping_list.get("items", [])
+        return []
 
     async def add_shopping_item(self, list_id: int, item: dict) -> dict:
-        url = (
-            f"{self._base}/api/household/{self._household}/shoppinglist/{list_id}/item"
-        )
-        r = await self._http.post(url, json=item)
+        url = f"{self._base}/api/household/{self._household}/item"
+        payload = {**item, "shoppinglist": list_id}
+        r = await self._http.post(url, json=payload)
         r.raise_for_status()
         return r.json()
 
     async def remove_shopping_item(self, list_id: int, item_id: int) -> None:
-        url = (
-            f"{self._base}/api/household/{self._household}"
-            f"/shoppinglist/{list_id}/item/{item_id}"
-        )
+        url = f"{self._base}/api/household/{self._household}/item/{item_id}"
         r = await self._http.delete(url)
         r.raise_for_status()
 
