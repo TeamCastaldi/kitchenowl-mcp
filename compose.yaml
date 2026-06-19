@@ -4,13 +4,13 @@ services:
     container_name: kitchenowl-mcp
     restart: unless-stopped
     environment:
-      - KITCHENOWL_API_URL=http://back:5000
+      - KITCHENOWL_API_URL=http://kitchenowl-front:80
       - KITCHENOWL_API_TOKEN=${KITCHENOWL_API_TOKEN}
       - KITCHENOWL_HOUSEHOLD_ID=${KITCHENOWL_HOUSEHOLD_ID:-1}
       - KITCHENOWL_DEFAULT_LIST_ID=${KITCHENOWL_DEFAULT_LIST_ID:-1}
     networks:
       - proxy-net
-      - kitchenowl-internal
+      - kitchen-owl_kitchenowl-internal
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.kitchenowl-mcp.rule=Host(`kitchenowl-mcp.castaldifamily.com`)"
@@ -21,6 +21,6 @@ services:
 networks:
   proxy-net:
     external: true
-  kitchenowl-internal:
-    external: false
+  kitchen-owl_kitchenowl-internal:
+    external: true
     name: kitchen-owl_kitchenowl-internal
