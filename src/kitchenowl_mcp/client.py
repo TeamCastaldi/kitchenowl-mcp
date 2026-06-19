@@ -37,8 +37,8 @@ class KitchenOwlClient:
             recipes = [
                 rec
                 for rec in recipes
-                if q in rec.get("name", "").lower()
-                or q in rec.get("description", "").lower()
+                if q in (rec.get("name") or "").lower()
+                or q in (rec.get("description") or "").lower()
             ]
         return recipes[:limit]
 
