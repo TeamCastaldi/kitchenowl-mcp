@@ -1,11 +1,30 @@
 [project]
-name = "{project-name}"
+name = "kitchenowl-mcp"
 version = "0.1.0"
-description = "{short project description}"
+description = "MCP server connecting Claude to a household KitchenOwl instance"
 requires-python = ">=3.11"
+dependencies = [
+    "fastmcp>=2.0.0",
+    "httpx>=0.27.0",
+    "pydantic-settings>=2.0.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0.0"]
+
+[project.scripts]
+kitchenowl-mcp = "kitchenowl_mcp.server:main"
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["src"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
@@ -30,7 +49,7 @@ ignore = [
 ]
 
 [tool.ruff.lint.isort]
-known-first-party = ["{project-name}"]
+known-first-party = ["kitchenowl_mcp"]
 
 [tool.ruff.format]
 quote-style = "double"

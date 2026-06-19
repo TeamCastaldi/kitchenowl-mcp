@@ -1,122 +1,90 @@
 # CLAUDE.md
 
-This file is the primary context document for Claude (and other LLM assistants) working in this repository. Fill it in as the project takes shape. An incomplete CLAUDE.md is better than none — add sections as you know them.
-
----
-
-## How to fill this in
-
-This file should be filled in during or just after initial project setup, then kept current as the project evolves. The best time to update it is at the end of a working session, before you close the repo.
-
-Each section below has a comment explaining what to put there. Remove the comments as you fill in real content.
-
-A well-maintained CLAUDE.md means every new LLM session starts with full context instead of having to rediscover the project from scratch.
+This file provides context for Claude (and other LLM assistants) working in this repository.
 
 ---
 
 ## Project identity
 
-<!-- 
-What does this project do? 2-3 sentences max.
-Include the public name if different from the repo name.
-Who is the intended user?
--->
+**kitchenowl-mcp** — An MCP (Model Context Protocol) server that connects Claude to a household KitchenOwl instance. Enables read/write access to recipes, shopping lists, and meal plans from within a Claude conversation. Deployed alongside KitchenOwl in a home Docker Compose stack on heimdall, exposed to claude.ai via Traefik.
 
 ## Stack
 
-<!-- 
-List the concrete technologies in use:
-- Language and version (e.g. Python 3.11)
-- Web framework (e.g. FastAPI)
-- Frontend (e.g. React 18 / Vite)
-- Database and ORM (e.g. PostgreSQL / SQLAlchemy + Alembic)
-- Test runner (pytest)
-- Linter/formatter (ruff)
-- Any other key dependencies
--->
+- **Runtime:** Python 3.11+
+- **MCP framework:** FastMCP 2.x (streamable-http transport)
+- **HTTP client:** httpx (async)
+- **Config:** pydantic-settings (reads `KITCHENOWL_*` env vars)
+- **Linter/formatter:** ruff
+- **Tests:** pytest
 
 ## Architecture
 
-<!--
-Describe the top-level structure of the codebase:
-- What lives in backend/, frontend/, db/
-- How the pieces connect (e.g. "FastAPI serves a REST API consumed by the React frontend")
-- Any key patterns enforced (e.g. provider adapter pattern, repository pattern)
-- Data flow at a high level
--->
+```
+claude.ai
+    │  HTTP/SSE (remote MCP, streamable-http)
+    ▼
+kitchenowl-mcp  (container on heimdall, port 8000)
+    │  HTTP REST + Bearer token
+    │  internal Docker network only
+    ▼
+kitchenowl-back  (existing KitchenOwl container)
+```
+
+**Key modules:**
+- `src/kitchenowl_mcp/config.py` — `Settings` via pydantic-settings, accessed lazily via `get_settings()`
+- `src/kitchenowl_mcp/auth.py` — `get_token(request_context=None)` — the auth seam; swap implementation for per-user lookup in v2 without touching tool handlers
+- `src/kitchenowl_mcp/client.py` — `KitchenOwlClient` — ALL KitchenOwl HTTP calls live here; one place to fix when the API changes
+- `src/kitchenowl_mcp/state.py` — module-level `_client` singleton; initialized in server lifespan, accessed by tools via `get_client()`
+- `src/kitchenowl_mcp/tools/` — one file per domain (recipes, shopping, meal_plan); plain async functions registered in server.py via `mcp.add_tool()`
+- `src/kitchenowl_mcp/server.py` — FastMCP app, lifespan hook (health-checks KitchenOwl at startup), tool registration, `main()` entry point
 
 ## Constraints (non-negotiable)
 
-<!--
-Things Claude must never do in this repo.
-Be explicit. Examples:
-- Never commit .env or any file containing secrets
-- Never add GUI to the CLI path
-- Never bypass the adapter pattern for external APIs
-- Never store PII in profiles
--->
+- Never commit `.env` or any token/secret — only `.env.example`
+- All KitchenOwl HTTP calls MUST go through `KitchenOwlClient` in `client.py` — no direct httpx calls in tool handlers
+- `get_token()` is the only place the API token is read — never reference `settings.kitchenowl_api_token` directly in tools
+- `get_settings()` is lazy (lru_cache) — do not call at module import time; call inside functions so import tests pass
+- Server must fail loudly at startup if KitchenOwl is unreachable (lifespan health check enforces this)
+- Conventional Commits format required for all commits
 
 ## Code style
 
-<!--
-- Naming conventions (snake_case for Python, PascalCase for React components, etc.)
-- Docstring format (Google style recommended)
-- Type hints: required or optional?
-- Error handling patterns
-- Logging: how and where (e.g. always use setup_logger(__name__))
-- Any patterns to avoid
--->
-
-## Scoring / ranking logic (if applicable)
-
-<!--
-If this project scores, ranks, or weights things:
-- What are the weights and what do they mean?
-- Where does this logic live?
-- What is and isn't handled by LLM vs deterministic code?
--->
+- ruff, 88 char line length, double quotes, isort
+- No comments unless the WHY is non-obvious
+- No module-level settings access (breaks import tests and delays startup error reporting)
+- Type hints required on all function signatures
 
 ## Current state
 
-<!--
-Keep this current. Update at the end of each session.
-Format:
 ### Done
-- bullet list of completed work
 
-### In progress
-- bullet list of active work
-
-### Not started
-- bullet list of planned but untouched work
--->
-
-### Done
+- v1 MCP server with 8 tools: `search_recipes`, `get_recipe`, `create_recipe`, `get_shopping_list`, `add_shopping_list_items`, `clear_checked_items`, `get_meal_plan`, `add_meal_plan_entry`
+- Dockerfile for container deployment
+- CI: ruff + pytest
 
 ### In progress
 
+- Deploy to heimdall Compose stack (Compose snippet is in the spec)
+
 ### Not started
+
+- P1 tools: `update_recipe`, `delete_recipe`, `list_tags`, `mark_recipe_made`
+- Structured logging
+- Per-user token mapping (v2, OpenWebUI)
 
 ## Open questions
 
-<!--
-Known ambiguities, deferred decisions, or things that will 
-trip up a new LLM session if not documented.
-Format: numbered list, one question per item.
-Remove items when resolved and add a note to the relevant ADR or spec.
--->
+1. Does KitchenOwl's API token expire? Plan assumes permanent (no refresh logic). Verify in KitchenOwl settings before prod deploy.
+2. Confirm `KITCHENOWL_DEFAULT_LIST_ID=1` is a valid list ID in the household.
+3. Confirm no Authentik middleware on the `kitchenowl-mcp` Traefik router — claude.ai sends its own auth headers and cannot pass Authentik.
 
 ## Decision log
 
-<!--
-A running summary of key decisions. For full context see docs/ARDs/.
-Format:
-### ADR-NNN — Short title
-- One line summary of the decision
-- Key consequence
-- What was ruled out
--->
+- **FastMCP over bare `mcp` library** — higher-level API, built-in streamable-http transport, auto schema generation from type hints
+- **`get_token(request_context=None)` signature** — accepts context param as v2 seam for per-user lookup without refactoring tool handlers
+- **Module-level `state._client` singleton** — avoids circular imports while giving tools access to the shared httpx client initialized in lifespan
+- **`KITCHENOWL_DEFAULT_LIST_ID` env var** — explicit config over auto-discovery; simpler, no extra API call per operation
 
 ---
 
-*Last updated: {date} | Session: {brief description}*
+*Last updated: 2026-06-19 | Session: v1 MCP server implementation*
