@@ -60,9 +60,19 @@ async def create_recipe(
     for idx, ingredient_name in enumerate(ingredients or []):
         lookup_key = ingredient_name.lower().strip()
         resolved = catalog_by_key.get(lookup_key) or await client.create_item(
-            {"name": ingredient_name.strip(), "default_key": lookup_key.replace(" ", "_")}
+            {
+                "name": ingredient_name.strip(),
+                "default_key": lookup_key.replace(" ", "_"),
+            }
         )
-        items.append({"id": resolved["id"], "description": "", "optional": False, "ordering": idx})
+        items.append(
+            {
+                "id": resolved["id"],
+                "description": "",
+                "optional": False,
+                "ordering": idx,
+            }
+        )
 
     payload: dict = {
         "name": name,
