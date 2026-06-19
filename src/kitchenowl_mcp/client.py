@@ -50,7 +50,8 @@ class KitchenOwlClient:
     async def create_recipe(self, payload: dict) -> dict:
         url = f"{self._base}/api/household/{self._household}/recipe"
         r = await self._http.post(url, json=payload)
-        r.raise_for_status()
+        if r.is_error:
+            raise Exception(f"KitchenOwl {r.status_code} on POST /recipe: {r.text}")
         return r.json()
 
     async def get_shopping_list_items(self, list_id: int) -> list[dict]:
