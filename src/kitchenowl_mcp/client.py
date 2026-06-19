@@ -18,11 +18,12 @@ class KitchenOwlClient:
         await self._http.aclose()
 
     async def health_check(self) -> None:
-        """Verify KitchenOwl is reachable. Raises on failure."""
-        url = f"{self._base}/api/household/{self._household}/recipe"
-        r = await self._http.get(url, params={"limit": 1})
-        r.raise_for_status()
-        logger.info("KitchenOwl connection verified at %s", self._base)
+        """Verify KitchenOwl is reachable. Accepts any non-5xx HTTP response."""
+        url = f"{self._base}/api/"
+        r = await self._http.get(url)
+        if r.status_code >= 500:
+            r.raise_for_status()
+        logger.info("KitchenOwl connection verified at %s (status %d)", self._base, r.status_code)
 
     async def list_recipes(self, search: str = "", limit: int = 50) -> list[dict]:
         url = f"{self._base}/api/household/{self._household}/recipe"
