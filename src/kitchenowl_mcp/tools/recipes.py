@@ -1,4 +1,8 @@
+import logging
+
 from .. import state
+
+logger = logging.getLogger(__name__)
 
 
 async def search_recipes(
@@ -52,19 +56,29 @@ async def create_recipe(
     catalog_by_key: dict[str, dict] = {
         key: item
         for item in catalog
-        for key in (item.get("name", "").lower(), item.get("default_key", "").lower())
+        for key in (
+            (item.get("name") or "").lower(),
+            (item.get("default_key") or "").lower(),
+        )
         if key
     }
 
     items = []
     for ingredient_name in ingredients or []:
         lookup_key = ingredient_name.lower().strip()
-        resolved = catalog_by_key.get(lookup_key) or await client.create_item(
-            {
-                "name": ingredient_name.strip(),
-                "default_key": lookup_key.replace(" ", "_"),
-            }
-        )
+        existing = catalog_by_key.get(lookup_key)
+        if existing:
+            resolved = existing
+        else:
+            logger.warning(
+                "Ingredient %r not found in catalog; creating new item", ingredient_name
+            )
+            resolved = await client.create_item(
+                {
+                    "name": ingredient_name.strip(),
+                    "default_key": lookup_key.replace(" ", "_"),
+                }
+            )
         items.append(
             {
                 "name": resolved.get("name", ingredient_name.strip()),
