@@ -104,6 +104,11 @@ class KitchenOwlClient:
         r.raise_for_status()
         return r.json()
 
+    async def update_recipe(self, recipe_id: int, payload: dict) -> dict:
+        r = await self._http.post(f"{self._base}/api/recipe/{recipe_id}", json=payload)
+        r.raise_for_status()
+        return r.json()
+
     async def delete_recipe(self, recipe_id: int) -> None:
         r = await self._http.delete(f"{self._base}/api/recipe/{recipe_id}")
         r.raise_for_status()

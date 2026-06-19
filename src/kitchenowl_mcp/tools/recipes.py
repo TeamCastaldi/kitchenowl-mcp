@@ -87,14 +87,85 @@ async def create_recipe(
             }
         )
 
+    steps_text = "\n".join(f"{i + 1}. {s}" for i, s in enumerate(steps or []))
+    full_description = "\n\n".join(filter(None, [description, steps_text]))
+
     payload: dict = {
         "name": name,
-        "description": description,
+        "description": full_description,
         "items": items,
-        "steps": [{"text": s} for s in (steps or [])],
-        "tags": [{"name": t} for t in (tags or [])],
+        "tags": list(tags or []),
     }
     return await client.create_recipe(payload)
+
+
+async def update_recipe(
+    recipe_id: int,
+    name: str | None = None,
+    description: str | None = None,
+    ingredients: list[str] | None = None,
+    steps: list[str] | None = None,
+    tags: list[str] | None = None,
+) -> dict:
+    """Update fields of an existing recipe in KitchenOwl.
+
+    Only provided fields are changed; omitted fields are left as-is.
+    Steps are formatted as a numbered list and appended to description.
+    Tags replace the full existing tag set (pass [] to clear all tags).
+    Use search_recipes() to find the recipe_id.
+    """
+    client = state.get_client()
+    payload: dict = {}
+
+    if name is not None:
+        payload["name"] = name
+
+    if description is not None or steps is not None:
+        steps_text = "\n".join(f"{i + 1}. {s}" for i, s in enumerate(steps or []))
+        full_description = "\n\n".join(filter(None, [description or "", steps_text]))
+        payload["description"] = full_description
+
+    if tags is not None:
+        payload["tags"] = list(tags)
+
+    if ingredients is not None:
+        catalog = await client.list_items()
+        catalog_by_key: dict[str, dict] = {
+            key: item
+            for item in catalog
+            for key in (
+                (item.get("name") or "").lower(),
+                (item.get("default_key") or "").lower(),
+            )
+            if key
+        }
+        items = []
+        for ingredient_name in ingredients:
+            lookup_key = ingredient_name.lower().strip()
+            existing = catalog_by_key.get(lookup_key)
+            if existing:
+                resolved = existing
+            else:
+                logger.warning(
+                    "Ingredient %r not found in catalog; creating new item",
+                    ingredient_name,
+                )
+                resolved = await client.create_item(
+                    {
+                        "name": ingredient_name.strip(),
+                        "default_key": lookup_key.replace(" ", "_"),
+                    }
+                )
+            items.append(
+                {
+                    "name": resolved.get("name", ingredient_name.strip()),
+                    "description": "",
+                    "optional": False,
+                }
+            )
+        payload["items"] = items
+
+    return await client.update_recipe(recipe_id, payload)
 
 
 async def delete_recipe(recipe_id: int) -> dict:
