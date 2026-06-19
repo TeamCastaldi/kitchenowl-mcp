@@ -48,15 +48,7 @@ async def create_recipe(
     """
     client = state.get_client()
 
-    items = [
-        {
-            "name": ingredient.strip(),
-            "description": "",
-            "optional": False,
-            "ordering": idx,
-        }
-        for idx, ingredient in enumerate(ingredients or [])
-    ]
+    items = [{"name": ingredient.strip()} for ingredient in (ingredients or [])]
 
     payload: dict = {
         "name": name,
