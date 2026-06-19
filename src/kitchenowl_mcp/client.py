@@ -18,10 +18,10 @@ class KitchenOwlClient:
         await self._http.aclose()
 
     async def health_check(self) -> None:
-        """Verify KitchenOwl is reachable. Accepts any non-5xx HTTP response."""
+        """Verify KitchenOwl is reachable. Raises on failure."""
         url = f"{self._base}/api/"
         r = await self._http.get(url)
-        if r.status_code >= 500:
+        if r.status_code != 401:
             r.raise_for_status()
         logger.info(
             "KitchenOwl connection verified at %s (status %d)",
