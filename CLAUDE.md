@@ -58,17 +58,15 @@ kitchenowl-back  (existing KitchenOwl container)
 
 ### Done
 
-- v1 MCP server with 8 tools: `search_recipes`, `get_recipe`, `create_recipe`, `get_shopping_list`, `add_shopping_list_items`, `clear_checked_items`, `get_meal_plan`, `add_meal_plan_entry`
+- v1 MCP server with 9 tools: `search_recipes`, `get_recipe`, `create_recipe`, `delete_recipe`, `get_shopping_list`, `add_shopping_list_items`, `clear_checked_items`, `get_meal_plan`, `add_meal_plan_entry`
+- `create_recipe` verified working — KitchenOwl recipe item schema accepts only `{name, description, optional}`; `id` and `ordering` are unknown fields and must be omitted
 - Dockerfile for container deployment
+- Deployed to heimdall Compose stack
 - CI: ruff + pytest
-
-### In progress
-
-- Deploy to heimdall Compose stack (Compose snippet is in the spec)
 
 ### Not started
 
-- P1 tools: `update_recipe`, `delete_recipe`, `list_tags`, `mark_recipe_made`
+- P1 tools: `update_recipe`, `list_tags`, `mark_recipe_made`
 - Structured logging
 - Per-user token mapping (v2, OpenWebUI)
 
@@ -87,4 +85,4 @@ kitchenowl-back  (existing KitchenOwl container)
 
 ---
 
-*Last updated: 2026-06-19 | Session: v1 MCP server implementation*
+*Last updated: 2026-06-19 | Session: create_recipe debugging + delete_recipe*
