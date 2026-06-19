@@ -22,5 +22,5 @@ networks:
   proxy-net:
     external: true
   kitchenowl-internal:
-    external: true
+    external: false
     name: kitchen-owl_kitchenowl-internal
