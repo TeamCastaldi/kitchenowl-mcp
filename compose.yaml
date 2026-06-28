@@ -1,6 +1,6 @@
 services:
   mcp:
-    build: .
+    image: ghcr.io/teamcastaldi/kitchenowl-mcp:${IMAGE_TAG:-latest}
     container_name: kitchenowl-mcp
     restart: unless-stopped
     environment:

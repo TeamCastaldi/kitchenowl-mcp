@@ -1,0 +1,14 @@
+.git
+.github
+.env
+.env.*
+docs/
+tests/
+scripts/
+*.md
+!README.md
+__pycache__
+*.pyc
+.pytest_cache/
+.ruff_cache/
+uv.lock
