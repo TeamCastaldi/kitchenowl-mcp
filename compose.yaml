@@ -4,7 +4,7 @@ services:
     container_name: kitchenowl-mcp
     restart: unless-stopped
     environment:
-      - KITCHENOWL_API_URL=http://kitchenowl-front:80
+      - KITCHENOWL_API_URL=http://kitchenowl-back:5000
       - KITCHENOWL_API_TOKEN=${KITCHENOWL_API_TOKEN}
       - KITCHENOWL_HOUSEHOLD_ID=${KITCHENOWL_HOUSEHOLD_ID:-1}
       - KITCHENOWL_DEFAULT_LIST_ID=${KITCHENOWL_DEFAULT_LIST_ID:-1}
@@ -13,7 +13,7 @@ services:
       - kitchen-owl_kitchenowl-internal
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.kitchenowl-mcp.rule=Host(`kitchenowl-mcp.castaldifamily.com`)"
+      - "traefik.http.routers.kitchenowl-mcp.rule=Host(`kitchenowl-mcp.yourdomain.com`)"
       - "traefik.http.routers.kitchenowl-mcp.entrypoints=websecure"
       - "traefik.http.routers.kitchenowl-mcp.tls.certresolver=cloudflare"
       - "traefik.http.services.kitchenowl-mcp.loadbalancer.server.port=8000"

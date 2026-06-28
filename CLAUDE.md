@@ -6,7 +6,7 @@ This file provides context for Claude (and other LLM assistants) working in this
 
 ## Project identity
 
-**kitchenowl-mcp** — An MCP (Model Context Protocol) server that connects Claude to a household KitchenOwl instance. Enables read/write access to recipes, shopping lists, and meal plans from within a Claude conversation. Deployed alongside KitchenOwl in a home Docker Compose stack on heimdall, exposed to claude.ai via Traefik.
+**kitchenowl-mcp** — An MCP (Model Context Protocol) server that connects Claude to a household KitchenOwl instance. Enables read/write access to recipes, shopping lists, and meal plans from within a Claude conversation. Deployed alongside KitchenOwl in a home Docker Compose stack, exposed to claude.ai via Traefik.
 
 ## Stack
 
@@ -23,7 +23,7 @@ This file provides context for Claude (and other LLM assistants) working in this
 claude.ai
     │  HTTP/SSE (remote MCP, streamable-http)
     ▼
-kitchenowl-mcp  (container on heimdall, port 8000)
+kitchenowl-mcp  (container, port 8000)
     │  HTTP REST + Bearer token
     │  internal Docker network only
     ▼
@@ -67,7 +67,7 @@ kitchenowl-back  (existing KitchenOwl container)
 - `add_meal_plan_entry` response is the updated recipe object, not a standalone planner entry; meal plan data is embedded on recipes via `planned_days` / `planned_cooking_dates`
 - Ingredient names are lowercased server-side on create (KitchenOwl behavior, not a bug)
 - Dockerfile for container deployment
-- Deployed to heimdall Compose stack
+- Deployed via Docker Compose
 - CI: ruff + pytest
 
 ### Not started
@@ -91,4 +91,4 @@ kitchenowl-back  (existing KitchenOwl container)
 
 ---
 
-*Last updated: 2026-06-20 | Session: stress test v3 — all 12 tools passing*
+*Last updated: 2026-06-27 | Session: stress test v3 — all 12 tools passing*

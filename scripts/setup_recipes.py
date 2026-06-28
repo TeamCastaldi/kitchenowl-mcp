@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """One-shot script: delete stub recipes, create Classic Omelet, update recipe steps.
 
-Run on heimdall where KITCHENOWL_* env vars are set:
+Run where KITCHENOWL_* env vars are set:
     python scripts/setup_recipes.py
 """
 

@@ -46,7 +46,7 @@ cp .env.example .env
 pip install -e ".[dev]"
 
 # 4. Run the server
-python -m kitchenowl_mcp
+kitchenowl-mcp
 ```
 
 The server listens on port 8000 (streamable-http transport).
@@ -60,8 +60,9 @@ services:
     ports:
       - "8000:8000"
     environment:
-      KITCHENOWL_BASE_URL: http://kitchenowl-back:5000
+      KITCHENOWL_API_URL: http://kitchenowl-back:5000
       KITCHENOWL_API_TOKEN: your_token_here
+      KITCHENOWL_HOUSEHOLD_ID: 1
       KITCHENOWL_DEFAULT_LIST_ID: 1
     depends_on:
       - kitchenowl-back
@@ -71,9 +72,10 @@ services:
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `KITCHENOWL_BASE_URL` | Yes | Base URL of the KitchenOwl backend |
+| `KITCHENOWL_API_URL` | Yes | Base URL of the KitchenOwl backend |
 | `KITCHENOWL_API_TOKEN` | Yes | Bearer token for KitchenOwl API auth |
-| `KITCHENOWL_DEFAULT_LIST_ID` | Yes | ID of the shopping list to use (default: `1`) |
+| `KITCHENOWL_HOUSEHOLD_ID` | No | Household ID (default: `1`) |
+| `KITCHENOWL_DEFAULT_LIST_ID` | No | ID of the shopping list to use (default: `1`) |
 
 ## Architecture
 
