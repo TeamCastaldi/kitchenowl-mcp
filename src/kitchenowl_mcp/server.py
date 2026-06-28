@@ -35,27 +35,31 @@ async def lifespan(server: FastMCP) -> AsyncGenerator[None, None]:
         state._client = None
 
 
-mcp = FastMCP("KitchenOwl", lifespan=lifespan)
+def _build_server() -> FastMCP:
+    server = FastMCP("KitchenOwl", lifespan=lifespan)
 
-# Recipes
-mcp.add_tool(recipes.search_recipes)
-mcp.add_tool(recipes.get_recipe)
-mcp.add_tool(recipes.create_recipe)
-mcp.add_tool(recipes.update_recipe)
-mcp.add_tool(recipes.delete_recipe)
-mcp.add_tool(recipes.list_tags)
-mcp.add_tool(recipes.mark_recipe_made)
+    # Recipes
+    server.add_tool(recipes.search_recipes)
+    server.add_tool(recipes.get_recipe)
+    server.add_tool(recipes.create_recipe)
+    server.add_tool(recipes.update_recipe)
+    server.add_tool(recipes.delete_recipe)
+    server.add_tool(recipes.list_tags)
+    server.add_tool(recipes.mark_recipe_made)
 
-# Shopping list
-mcp.add_tool(shopping.get_shopping_list)
-mcp.add_tool(shopping.add_shopping_list_items)
-mcp.add_tool(shopping.clear_checked_items)
+    # Shopping list
+    server.add_tool(shopping.get_shopping_list)
+    server.add_tool(shopping.add_shopping_list_items)
+    server.add_tool(shopping.clear_checked_items)
 
-# Meal plan
-mcp.add_tool(meal_plan.get_meal_plan)
-mcp.add_tool(meal_plan.add_meal_plan_entry)
+    # Meal plan
+    server.add_tool(meal_plan.get_meal_plan)
+    server.add_tool(meal_plan.add_meal_plan_entry)
+
+    return server
 
 
 def main() -> None:
     settings = get_settings()
-    mcp.run(transport="streamable-http", host="0.0.0.0", port=settings.mcp_port)
+    server = _build_server()
+    server.run(transport="streamable-http", host="0.0.0.0", port=settings.mcp_port)

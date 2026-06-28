@@ -4,7 +4,7 @@ services:
     container_name: kitchenowl-mcp
     restart: unless-stopped
     environment:
-      - KITCHENOWL_API_URL=http://kitchenowl-back:5000
+      - KITCHENOWL_API_URL=${KITCHENOWL_API_URL:-http://kitchenowl-front:80}
       - KITCHENOWL_API_TOKEN=${KITCHENOWL_API_TOKEN}
       - KITCHENOWL_HOUSEHOLD_ID=${KITCHENOWL_HOUSEHOLD_ID:-1}
       - KITCHENOWL_DEFAULT_LIST_ID=${KITCHENOWL_DEFAULT_LIST_ID:-1}
