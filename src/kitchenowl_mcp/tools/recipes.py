@@ -56,9 +56,10 @@ async def search_recipes(
 ) -> list[dict]:
     """Search KitchenOwl recipes by name or keyword.
 
-    Returns a list of matching recipes with id, name, description, and tags.
+    Returns a list of matching recipes with id, name, description (free-text
+    only), steps (separate ordered list), and tags (list of name strings).
     Use get_recipe() with the returned id to fetch full details including
-    ingredients and steps. Pass tags to filter by tag name (client-side filter).
+    ingredients. Pass tags to filter by tag name (client-side filter).
     """
     client = state.get_client()
     recipes = await client.list_recipes(search=query, limit=limit)

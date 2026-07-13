@@ -44,7 +44,7 @@ def parse_description(raw: str) -> tuple[str, list[str]]:
         return raw.strip(), []
     free_text = raw[: match.start()].strip()
     steps = [
-        re.sub(r"^\d+\.\s*", "", line.strip())
+        re.sub(r"^\d+\.\s+", "", line.strip())
         for line in raw[match.end() :].splitlines()
         if line.strip()
     ]

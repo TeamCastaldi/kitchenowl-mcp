@@ -54,3 +54,9 @@ def test_wire_payload_never_includes_id_or_ordering() -> None:
 def test_normalize_tags_flattens_dicts_and_passes_through_strings() -> None:
     assert normalize_tags([{"id": 1, "name": "breakfast"}]) == ["breakfast"]
     assert normalize_tags(["breakfast"]) == ["breakfast"]
+
+
+def test_parse_description_preserves_decimal_numbers_in_step_text() -> None:
+    raw = "## Steps\n1. Add 1.5 cups of flour.\n2. Mix well."
+    _, steps = parse_description(raw)
+    assert steps == ["Add 1.5 cups of flour.", "Mix well."]
