@@ -17,6 +17,7 @@ Deployed alongside KitchenOwl in a home Docker Compose stack, exposed to claude.
 | `list_tags` | List all household recipe tags |
 | `mark_recipe_made` | Log a cook event (sets `planned=true` on the recipe) |
 | `delete_recipe` | Delete a recipe by ID |
+| `audit_recipe_schema` | Flag recipes not yet migrated to the `## Steps` description convention, missing ingredients, or with blank item names |
 | `get_shopping_list` | Read the current shopping list |
 | `add_shopping_list_items` | Add items with optional amounts and units |
 | `clear_checked_items` | Remove checked items from the shopping list |
@@ -100,7 +101,7 @@ src/kitchenowl_mcp/
   state.py       shared client singleton
   server.py      FastMCP app, lifespan, tool registration
   tools/
-    recipes.py   search, get, create, update, list_tags, mark_made, delete
+    recipes.py   search, get, create, update, list_tags, mark_made, delete, audit_schema
     shopping.py  get_list, add_items, clear_checked
     meal_plan.py get_plan, add_entry
 ```

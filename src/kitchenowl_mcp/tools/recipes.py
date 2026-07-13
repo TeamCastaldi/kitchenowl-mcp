@@ -5,6 +5,7 @@ from ..client import KitchenOwlClient
 from ..models import (
     Recipe,
     RecipeItem,
+    has_unmigrated_steps,
     normalize_tags,
     parse_description,
     serialize_description,
@@ -188,3 +189,36 @@ async def delete_recipe(recipe_id: int) -> dict:
     """
     await state.get_client().delete_recipe(recipe_id)
     return {"deleted_recipe_id": recipe_id}
+
+
+async def audit_recipe_schema() -> dict:
+    """Audit every recipe in this household against the canonical schema.
+
+    Flags recipes that predate the '## Steps' description convention
+    (numbered steps embedded directly in description with no heading —
+    these read back as unstructured free text with no separate steps list
+    until the recipe is next edited via update_recipe), recipes with no
+    ingredients, and ingredient items with a blank name. Read-only —
+    fixing flagged recipes is a separate update_recipe() call. Returns a
+    summary plus the list of flagged recipes with reasons.
+    """
+    recipes = await state.get_client().list_recipes(limit=500)
+
+    flagged = []
+    for r in recipes:
+        issues = []
+        if has_unmigrated_steps(r.get("description") or ""):
+            issues.append("legacy_steps_not_migrated")
+        items = r.get("items") or []
+        if not items:
+            issues.append("no_ingredients")
+        if any(not (i.get("name") or "").strip() for i in items):
+            issues.append("item_missing_name")
+        if issues:
+            flagged.append({"id": r.get("id"), "name": r.get("name"), "issues": issues})
+
+    return {
+        "total_recipes": len(recipes),
+        "flagged_count": len(flagged),
+        "flagged": flagged,
+    }

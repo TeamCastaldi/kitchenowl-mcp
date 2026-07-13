@@ -59,13 +59,14 @@ kitchenowl-back  (existing KitchenOwl container)
 
 ### Done
 
-- All 12 MCP tools implemented and stress-tested (v3 run: 0 failures, 15 operations):
-  - Recipes: `search_recipes`, `get_recipe`, `create_recipe`, `update_recipe`, `list_tags`, `mark_recipe_made`, `delete_recipe`
+- All 13 MCP tools implemented and stress-tested (v3 run: 0 failures, 15 operations; `audit_recipe_schema` added after v3, not yet stress-tested):
+  - Recipes: `search_recipes`, `get_recipe`, `create_recipe`, `update_recipe`, `list_tags`, `mark_recipe_made`, `delete_recipe`, `audit_recipe_schema`
   - Shopping: `get_shopping_list`, `add_shopping_list_items`, `clear_checked_items`
   - Meal plan: `get_meal_plan`, `add_meal_plan_entry`
 - KitchenOwl recipe item schema confirmed: `{name, description, optional}` only — `id` and `ordering` must be omitted
 - Canonical recipe schema defined in `models.py` (`Recipe`/`RecipeItem`): steps round-trip via a `## Steps` heading section appended to `description` (KitchenOwl has no native steps column) instead of being silently flattened in three different places; `get_recipe`/`search_recipes` return `steps` as a separate structured field and `tags` normalized to `list[str]` on both read and write
 - Fixed: `update_recipe` previously recomputed `description` from only the current call's `description`/`steps` args, silently discarding whatever was embedded in the other on a partial update. It now fetches the current recipe and merges the untouched half before re-serializing — `steps=[]`/`description=""` still explicitly clear a field
+- `audit_recipe_schema` tool: read-only report flagging recipes not yet migrated to the `## Steps` convention (`models.has_unmigrated_steps` — numbered list in `description` with no heading, ≥2 numbered lines), recipes with no ingredients, and items with a blank name. Does not fix anything itself; a flagged recipe needs a follow-up `update_recipe(recipe_id, steps=[...])` call to migrate it
 - `mark_recipe_made` sets `planned=true` and appends to `planned_cooking_dates`; no discrete cook-history log exists in the API
 - `add_meal_plan_entry` response is the updated recipe object, not a standalone planner entry; meal plan data is embedded on recipes via `planned_days` / `planned_cooking_dates`
 - Ingredient names are lowercased server-side on create (KitchenOwl behavior, not a bug)
