@@ -8,11 +8,26 @@ services:
       - KITCHENOWL_API_TOKEN=${KITCHENOWL_API_TOKEN}
       - KITCHENOWL_HOUSEHOLD_ID=${KITCHENOWL_HOUSEHOLD_ID:-1}
       - KITCHENOWL_DEFAULT_LIST_ID=${KITCHENOWL_DEFAULT_LIST_ID:-1}
+      # Chat UI (optional, default disabled) — see .env.example for details
+      - ENABLE_CHAT_UI=${ENABLE_CHAT_UI:-false}
+      - CHAT_SHARED_PASSWORD=${CHAT_SHARED_PASSWORD:-}
+      - CHAT_SESSION_SECRET=${CHAT_SESSION_SECRET:-}
+      - CHAT_SESSION_COOKIE_SECURE=${CHAT_SESSION_COOKIE_SECURE:-true}
+      - CHAT_PUBLIC_BASE_URL=${CHAT_PUBLIC_BASE_URL:-}
+      - AUTHENTIK_ISSUER=${AUTHENTIK_ISSUER:-}
+      - AUTHENTIK_CLIENT_ID=${AUTHENTIK_CLIENT_ID:-}
+      - AUTHENTIK_CLIENT_SECRET=${AUTHENTIK_CLIENT_SECRET:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - ANTHROPIC_MODEL=${ANTHROPIC_MODEL:-claude-sonnet-5}
+      - CHAT_MAX_TOKENS=${CHAT_MAX_TOKENS:-4096}
+      - CHAT_MAX_TOOL_ROUNDS=${CHAT_MAX_TOOL_ROUNDS:-8}
     networks:
       - proxy-net
       - kitchen-owl_kitchenowl-internal
     labels:
       - "traefik.enable=true"
+      # /chat rides the same router as /mcp — same container/port, no separate
+      # Traefik router needed for the chat UI.
       - "traefik.http.routers.kitchenowl-mcp.rule=Host(`kitchenowl-mcp.yourdomain.com`)"
       - "traefik.http.routers.kitchenowl-mcp.entrypoints=websecure"
       - "traefik.http.routers.kitchenowl-mcp.tls.certresolver=cloudflare"

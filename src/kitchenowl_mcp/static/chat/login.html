@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KitchenOwl Chat — Sign in</title>
+<link rel="stylesheet" href="/chat/static/style.css">
+<style>
+  .login-wrap { max-width: 360px; margin: 4rem auto; padding: 1rem; }
+  .login-wrap form { display: flex; flex-direction: column; gap: 0.75rem; }
+  .login-wrap input { padding: 0.6rem 0.8rem; border-radius: 0.5rem; border: 1px solid var(--border); background: var(--bg); color: var(--fg); font: inherit; }
+  .divider { text-align: center; color: var(--muted); margin: 1rem 0; }
+</style>
+</head>
+<body>
+<div class="login-wrap">
+  <h1>KitchenOwl Chat</h1>
+  {error_banner}
+  {password_form}
+  {divider}
+  {oidc_button}
+</div>
+</body>
+</html>
