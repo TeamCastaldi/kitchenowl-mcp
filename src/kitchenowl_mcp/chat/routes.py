@@ -9,7 +9,7 @@ from starlette.responses import (
     RedirectResponse,
 )
 
-from ..config import get_settings
+from ..config import get_settings, is_authentik_configured
 from . import agent, auth
 from .sessions import get_or_create_session
 
@@ -38,11 +38,7 @@ async def login_page(request: Request, error: str | None = None) -> HTMLResponse
             "</form>"
         )
 
-    has_authentik = bool(
-        settings.authentik_issuer
-        and settings.authentik_client_id
-        and settings.authentik_client_secret
-    )
+    has_authentik = is_authentik_configured(settings)
     oidc_button = (
         (
             '<form method="get" action="/chat/oidc/login">'
@@ -76,11 +72,20 @@ async def login_submit(request: Request) -> RedirectResponse | HTMLResponse:
 
 async def oidc_login(request: Request):
     settings = get_settings()
+    if not is_authentik_configured(settings):
+        return JSONResponse(
+            {"error": "Authentik login is not configured"}, status_code=404
+        )
     redirect_uri = f"{settings.chat_public_base_url.rstrip('/')}/chat/oidc/callback"
     return await auth.get_oauth_client().authorize_redirect(request, redirect_uri)
 
 
-async def oidc_callback(request: Request) -> RedirectResponse:
+async def oidc_callback(request: Request) -> RedirectResponse | JSONResponse:
+    settings = get_settings()
+    if not is_authentik_configured(settings):
+        return JSONResponse(
+            {"error": "Authentik login is not configured"}, status_code=404
+        )
     client = auth.get_oauth_client()
     token = await client.authorize_access_token(request)
     userinfo = token.get("userinfo") or {}

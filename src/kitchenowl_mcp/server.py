@@ -84,7 +84,7 @@ def _build_asgi_app(server: FastMCP):
             SessionMiddleware,
             secret_key=settings.chat_session_secret,
             session_cookie="kowl_chat_session",
-            https_only=True,
+            https_only=settings.chat_session_cookie_secure,
             same_site="lax",
         ),
         Middleware(ChatAuthGateMiddleware),

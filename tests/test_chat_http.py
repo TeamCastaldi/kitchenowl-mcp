@@ -139,6 +139,18 @@ def test_wrong_password_does_not_authenticate(chat_app):
         assert resp2.status_code in (302, 303, 307)
 
 
+def test_oidc_login_404s_when_authentik_not_configured(chat_app):
+    with _client(chat_app) as client:
+        resp = client.get("/chat/oidc/login", follow_redirects=False)
+        assert resp.status_code == 404
+
+
+def test_oidc_callback_404s_when_authentik_not_configured(chat_app):
+    with _client(chat_app) as client:
+        resp = client.get("/chat/oidc/callback", follow_redirects=False)
+        assert resp.status_code == 404
+
+
 def test_static_assets_serve_without_auth(chat_app):
     with _client(chat_app) as client:
         for path in ("/chat/static/app.js", "/chat/static/style.css"):
