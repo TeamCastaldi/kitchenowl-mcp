@@ -3,7 +3,16 @@
 
 def test_package_imports() -> None:
     from kitchenowl_mcp import auth, client, state  # noqa: F401
-    from kitchenowl_mcp.tools import meal_plan, recipes, shopping  # noqa: F401
+    from kitchenowl_mcp.tools import (  # noqa: F401
+        meal_plan,
+        recipes,
+        registry,
+        shopping,
+    )
+
+
+def test_chat_package_imports() -> None:
+    from kitchenowl_mcp.chat import dispatch, sessions, tool_schemas  # noqa: F401
 
 
 def test_get_client_raises_before_init() -> None:
