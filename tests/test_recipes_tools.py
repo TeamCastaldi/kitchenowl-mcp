@@ -1,0 +1,111 @@
+import asyncio
+from contextlib import contextmanager
+
+from kitchenowl_mcp import state
+from kitchenowl_mcp.tools import recipes
+
+
+class FakeKitchenOwlClient:
+    def __init__(
+        self, recipe: dict | None = None, recipes: list[dict] | None = None
+    ) -> None:
+        self._recipe = recipe
+        self._recipes = recipes if recipes is not None else ([recipe] if recipe else [])
+        self.update_payload: dict | None = None
+
+    async def get_recipe(self, recipe_id: int) -> dict:
+        return self._recipe
+
+    async def update_recipe(self, recipe_id: int, payload: dict) -> dict:
+        self.update_payload = payload
+        return {**self._recipe, **payload}
+
+    async def create_recipe(self, payload: dict) -> dict:
+        return payload
+
+    async def list_recipes(self, search: str = "", limit: int = 50) -> list[dict]:
+        return self._recipes
+
+    async def list_items(self) -> list[dict]:
+        return []
+
+    async def create_item(self, payload: dict) -> dict:
+        return payload
+
+
+@contextmanager
+def _active_client(client: FakeKitchenOwlClient):
+    state._client = client
+    try:
+        yield client
+    finally:
+        state._client = None
+
+
+def _make_fake_client() -> FakeKitchenOwlClient:
+    return FakeKitchenOwlClient(
+        recipe={
+            "id": 1,
+            "name": "Omelet",
+            "description": "Original notes.\n\n## Steps\n1. Old step one.\n2. Old step two.",
+        }
+    )
+
+
+def test_update_steps_only_preserves_existing_description() -> None:
+    with _active_client(_make_fake_client()) as client:
+        asyncio.run(recipes.update_recipe(1, steps=["New step."]))
+
+    assert (
+        client.update_payload["description"]
+        == "Original notes.\n\n## Steps\n1. New step."
+    )
+
+
+def test_update_description_only_preserves_existing_steps() -> None:
+    with _active_client(_make_fake_client()) as client:
+        asyncio.run(recipes.update_recipe(1, description="New notes."))
+
+    assert (
+        client.update_payload["description"]
+        == "New notes.\n\n## Steps\n1. Old step one.\n2. Old step two."
+    )
+
+
+def test_audit_flags_legacy_recipe_missing_ingredients_and_blank_item_name() -> None:
+    fake_recipes = [
+        {
+            "id": 1,
+            "name": "Migrated Recipe",
+            "description": "Notes.\n\n## Steps\n1. Do a thing.",
+            "items": [{"name": "eggs"}],
+        },
+        {
+            "id": 2,
+            "name": "Legacy Recipe",
+            "description": "1. Crack eggs.\n2. Whisk them.",
+            "items": [{"name": "eggs"}],
+        },
+        {
+            "id": 3,
+            "name": "No Ingredients Recipe",
+            "description": "Just notes.",
+            "items": [],
+        },
+        {
+            "id": 4,
+            "name": "Blank Item Recipe",
+            "description": "Just notes.",
+            "items": [{"name": ""}],
+        },
+    ]
+    with _active_client(FakeKitchenOwlClient(recipes=fake_recipes)):
+        report = asyncio.run(recipes.audit_recipe_schema())
+
+    assert report["total_recipes"] == 4
+    assert report["flagged_count"] == 3
+    flagged_by_id = {f["id"]: f["issues"] for f in report["flagged"]}
+    assert flagged_by_id[2] == ["legacy_steps_not_migrated"]
+    assert flagged_by_id[3] == ["no_ingredients"]
+    assert flagged_by_id[4] == ["item_missing_name"]
+    assert 1 not in flagged_by_id

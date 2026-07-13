@@ -46,6 +46,7 @@ def _build_server() -> FastMCP:
     server.add_tool(recipes.delete_recipe)
     server.add_tool(recipes.list_tags)
     server.add_tool(recipes.mark_recipe_made)
+    server.add_tool(recipes.audit_recipe_schema)
 
     # Shopping list
     server.add_tool(shopping.get_shopping_list)

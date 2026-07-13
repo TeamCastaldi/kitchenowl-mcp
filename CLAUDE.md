@@ -33,7 +33,8 @@ kitchenowl-back  (existing KitchenOwl container)
 **Key modules:**
 - `src/kitchenowl_mcp/config.py` — `Settings` via pydantic-settings, accessed lazily via `get_settings()`
 - `src/kitchenowl_mcp/auth.py` — `get_token(request_context=None)` — the auth seam; swap implementation for per-user lookup in v2 without touching tool handlers
-- `src/kitchenowl_mcp/client.py` — `KitchenOwlClient` — ALL KitchenOwl HTTP calls live here; one place to fix when the API changes
+- `src/kitchenowl_mcp/models.py` — canonical `Recipe`/`RecipeItem` pydantic models; `parse_description`/`serialize_description` implement the steps-in-description convention (KitchenOwl has no native steps field); `normalize_tags` flattens read-shape tags (`[{id,name}]`) to write-shape (`list[str]`)
+- `src/kitchenowl_mcp/client.py` — `KitchenOwlClient` — ALL KitchenOwl HTTP calls live here; one place to fix when the API changes; stays a pure dict-in/dict-out transport layer, schema-agnostic by design — model construction/serialization happens in the tool layer
 - `src/kitchenowl_mcp/state.py` — module-level `_client` singleton; initialized in server lifespan, accessed by tools via `get_client()`
 - `src/kitchenowl_mcp/tools/` — one file per domain (recipes, shopping, meal_plan); plain async functions registered in server.py via `mcp.add_tool()`
 - `src/kitchenowl_mcp/server.py` — FastMCP app, lifespan hook (health-checks KitchenOwl at startup), tool registration, `main()` entry point
@@ -58,11 +59,14 @@ kitchenowl-back  (existing KitchenOwl container)
 
 ### Done
 
-- All 12 MCP tools implemented and stress-tested (v3 run: 0 failures, 15 operations):
-  - Recipes: `search_recipes`, `get_recipe`, `create_recipe`, `update_recipe`, `list_tags`, `mark_recipe_made`, `delete_recipe`
+- All 13 MCP tools implemented and stress-tested (v3 run: 0 failures, 15 operations; `audit_recipe_schema` added after v3, not yet stress-tested):
+  - Recipes: `search_recipes`, `get_recipe`, `create_recipe`, `update_recipe`, `list_tags`, `mark_recipe_made`, `delete_recipe`, `audit_recipe_schema`
   - Shopping: `get_shopping_list`, `add_shopping_list_items`, `clear_checked_items`
   - Meal plan: `get_meal_plan`, `add_meal_plan_entry`
 - KitchenOwl recipe item schema confirmed: `{name, description, optional}` only — `id` and `ordering` must be omitted
+- Canonical recipe schema defined in `models.py` (`Recipe`/`RecipeItem`): steps round-trip via a `## Steps` heading section appended to `description` (KitchenOwl has no native steps column) instead of being silently flattened in three different places; `get_recipe`/`search_recipes` return `steps` as a separate structured field and `tags` normalized to `list[str]` on both read and write
+- Fixed: `update_recipe` previously recomputed `description` from only the current call's `description`/`steps` args, silently discarding whatever was embedded in the other on a partial update. It now fetches the current recipe and merges the untouched half before re-serializing — `steps=[]`/`description=""` still explicitly clear a field
+- `audit_recipe_schema` tool: read-only report flagging recipes not yet migrated to the `## Steps` convention (`models.has_unmigrated_steps` — numbered list in `description` with no heading, ≥2 numbered lines), recipes with no ingredients, and items with a blank name. Does not fix anything itself; a flagged recipe needs a follow-up `update_recipe(recipe_id, steps=[...])` call to migrate it
 - `mark_recipe_made` sets `planned=true` and appends to `planned_cooking_dates`; no discrete cook-history log exists in the API
 - `add_meal_plan_entry` response is the updated recipe object, not a standalone planner entry; meal plan data is embedded on recipes via `planned_days` / `planned_cooking_dates`
 - Ingredient names are lowercased server-side on create (KitchenOwl behavior, not a bug)
@@ -88,7 +92,9 @@ kitchenowl-back  (existing KitchenOwl container)
 - **`get_token(request_context=None)` signature** — accepts context param as v2 seam for per-user lookup without refactoring tool handlers
 - **Module-level `state._client` singleton** — avoids circular imports while giving tools access to the shared httpx client initialized in lifespan
 - **`KITCHENOWL_DEFAULT_LIST_ID` env var** — explicit config over auto-discovery; simpler, no extra API call per operation
+- **Steps live inside `description` behind a `## Steps` marker, not a fabricated field** — KitchenOwl's API has no steps column; scope was deliberately kept to fields KitchenOwl natively supports rather than inventing extended metadata (source, time, image, servings-on-recipe) it can't persist. The marker keeps descriptions readable if viewed directly in KitchenOwl's own UI. Known limitation: recipes created before this convention show old step-like text as part of free-text `description` until their next edit — no automatic migration is performed
+- **`client.py` stays schema-agnostic** — recipe model construction/serialization lives in `tools/recipes.py`, not `client.py`, keeping the client a pure dict-in/dict-out transport layer consistent with every other method in that file
 
 ---
 
-*Last updated: 2026-06-27 | Session: stress test v3 — all 12 tools passing*
+*Last updated: 2026-07-13 | Session: canonical recipe schema (models.py) + update_recipe clobbering fix*

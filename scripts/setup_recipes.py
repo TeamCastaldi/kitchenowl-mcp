@@ -14,6 +14,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 from kitchenowl_mcp.auth import get_token
 from kitchenowl_mcp.client import KitchenOwlClient
 from kitchenowl_mcp.config import get_settings
+from kitchenowl_mcp.models import Recipe, parse_description, serialize_description
+from kitchenowl_mcp.tools.recipes import resolve_ingredient_items
 
 STUB_IDS = [1, 2, 6]
 STUB_NAMES = {
@@ -95,10 +97,6 @@ RECIPE_STEPS = {
 }
 
 
-def _steps_to_description(steps: list[str]) -> str:
-    return "\n".join(f"{i + 1}. {s}" for i, s in enumerate(steps))
-
-
 async def main() -> None:
     s = get_settings()
     client = KitchenOwlClient(
@@ -126,48 +124,27 @@ async def main() -> None:
                     print(f"skip name={r['name']!r}: {e}")
 
         # --- create Classic Omelet ---
-        catalog = await client.list_items()
-        catalog_by_key: dict[str, dict] = {
-            key: item
-            for item in catalog
-            for key in (
-                (item.get("name") or "").lower(),
-                (item.get("default_key") or "").lower(),
-            )
-            if key
-        }
-
-        items = []
-        for ing in CLASSIC_OMELET["ingredients"]:
-            lookup = ing.lower().strip()
-            resolved = catalog_by_key.get(lookup) or await client.create_item(
-                {"name": ing.strip(), "default_key": lookup.replace(" ", "_")}
-            )
-            items.append(
-                {
-                    "name": resolved.get("name", ing.strip()),
-                    "description": "",
-                    "optional": False,
-                }
-            )
-
-        steps_text = _steps_to_description(CLASSIC_OMELET["steps"])
-        full_description = "\n\n".join(
-            filter(None, [CLASSIC_OMELET["description"], steps_text])
+        items = await resolve_ingredient_items(client, CLASSIC_OMELET["ingredients"])
+        recipe = Recipe(
+            name=CLASSIC_OMELET["name"],
+            description=CLASSIC_OMELET["description"],
+            steps=CLASSIC_OMELET["steps"],
+            items=items,
+            tags=CLASSIC_OMELET["tags"],
         )
-        payload = {
-            "name": CLASSIC_OMELET["name"],
-            "description": full_description,
-            "items": items,
-            "tags": [],
-        }
-        result = await client.create_recipe(payload)
+        result = await client.create_recipe(recipe.to_wire_payload())
         print(f"created recipe id={result.get('id')} name={result.get('name')!r}")
 
         # --- update recipes 1–4 with steps ---
         for recipe_id, recipe_data in RECIPE_STEPS.items():
-            description = _steps_to_description(recipe_data["steps"])
             try:
+                current = await client.get_recipe(recipe_id)
+                current_description, _ = parse_description(
+                    current.get("description") or ""
+                )
+                description = serialize_description(
+                    current_description, recipe_data["steps"]
+                )
                 result = await client.update_recipe(
                     recipe_id, {"description": description}
                 )
