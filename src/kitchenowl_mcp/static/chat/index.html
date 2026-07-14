@@ -10,9 +10,12 @@
 <div class="wrap">
   <header>
     <h1>KitchenOwl Chat</h1>
-    <form method="post" action="/chat/logout" class="logout-form">
-      <button type="submit" class="logout-btn">Log out</button>
-    </form>
+    <div class="header-actions">
+      <button type="button" id="clear-btn" class="clear-btn">New chat</button>
+      <form method="post" action="/chat/logout" class="logout-form">
+        <button type="submit" class="logout-btn">Log out</button>
+      </form>
+    </div>
   </header>
   <div id="messages"></div>
   <form id="composer" autocomplete="off">

@@ -11,7 +11,7 @@ from starlette.responses import (
 
 from ..config import get_settings, is_authentik_configured
 from . import agent, auth
-from .sessions import get_or_create_session
+from .sessions import get_or_create_session, reset_session
 
 logger = logging.getLogger(__name__)
 
@@ -117,6 +117,12 @@ async def api_message(request: Request) -> JSONResponse:
         logger.exception("chat message handling failed")
         return JSONResponse({"error": "internal error"}, status_code=502)
     return JSONResponse(result)
+
+
+async def api_clear(request: Request) -> JSONResponse:
+    session = get_or_create_session(request)
+    reset_session(session)
+    return JSONResponse({"status": "cleared"})
 
 
 async def api_confirm(request: Request) -> JSONResponse:

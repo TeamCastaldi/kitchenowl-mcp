@@ -52,3 +52,18 @@ def test_prune_sessions_enforces_max_size() -> None:
     # the oldest (lowest last_active) entries were the ones evicted
     assert "s0" not in sessions.SESSIONS
     assert f"s{total - 1}" in sessions.SESSIONS
+
+
+def test_reset_session_clears_messages_and_pending_state() -> None:
+    session = sessions.ChatSession(
+        id="s1",
+        messages=[{"role": "user", "content": "hi"}],
+        pending_tool_uses=[sessions.PendingConfirmation("tu1", "delete_recipe", {})],
+        pending_ready_results=[{"type": "tool_result"}],
+    )
+
+    sessions.reset_session(session)
+
+    assert session.messages == []
+    assert session.pending_tool_uses == []
+    assert session.pending_ready_results == []

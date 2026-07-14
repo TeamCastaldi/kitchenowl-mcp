@@ -1,11 +1,99 @@
 const messagesEl = document.getElementById("messages");
 const form = document.getElementById("composer");
 const input = document.getElementById("input");
+const clearBtn = document.getElementById("clear-btn");
+
+function escapeHtml(str) {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function renderInline(text) {
+  text = text.replace(/`([^`]+)`/g, (_, code) => `<code>${code}</code>`);
+  text = text.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+  text = text.replace(/\*([^*]+)\*/g, "<em>$1</em>");
+  text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, label, url) => {
+    if (!/^https?:\/\//i.test(url)) return match;
+    return `<a href="${url}" target="_blank" rel="noopener noreferrer">${label}</a>`;
+  });
+  return text;
+}
+
+// Small hand-rolled renderer for the markdown subset Claude actually
+// produces (bold/italic, inline code, headings, lists, links) — no
+// external library/CDN, consistent with this frontend's no-build-step
+// approach. Input is HTML-escaped first, so any structural markup below
+// is the only real HTML ever inserted.
+function renderMarkdown(raw) {
+  const lines = escapeHtml(raw).split("\n");
+  const html = [];
+  let i = 0;
+
+  while (i < lines.length) {
+    const line = lines[i];
+
+    const heading = line.match(/^(#{1,6})\s+(.*)$/);
+    if (heading) {
+      const level = Math.min(heading[1].length + 2, 6);
+      html.push(`<h${level}>${renderInline(heading[2])}</h${level}>`);
+      i++;
+      continue;
+    }
+
+    if (/^[-*]\s+/.test(line)) {
+      const items = [];
+      while (i < lines.length && /^[-*]\s+/.test(lines[i])) {
+        items.push(`<li>${renderInline(lines[i].replace(/^[-*]\s+/, ""))}</li>`);
+        i++;
+      }
+      html.push(`<ul>${items.join("")}</ul>`);
+      continue;
+    }
+
+    if (/^\d+\.\s+/.test(line)) {
+      const items = [];
+      while (i < lines.length && /^\d+\.\s+/.test(lines[i])) {
+        items.push(`<li>${renderInline(lines[i].replace(/^\d+\.\s+/, ""))}</li>`);
+        i++;
+      }
+      html.push(`<ol>${items.join("")}</ol>`);
+      continue;
+    }
+
+    if (line.trim() === "") {
+      i++;
+      continue;
+    }
+
+    const paraLines = [];
+    while (
+      i < lines.length &&
+      lines[i].trim() !== "" &&
+      !/^[-*]\s+/.test(lines[i]) &&
+      !/^\d+\.\s+/.test(lines[i]) &&
+      !/^#{1,6}\s+/.test(lines[i])
+    ) {
+      paraLines.push(renderInline(lines[i]));
+      i++;
+    }
+    html.push(`<p>${paraLines.join("<br>")}</p>`);
+  }
+
+  return html.join("");
+}
 
 function addBubble(role, text) {
   const div = document.createElement("div");
   div.className = `bubble ${role}`;
-  div.textContent = text;
+  if (role === "assistant") {
+    div.innerHTML = renderMarkdown(text);
+  } else {
+    div.textContent = text;
+  }
   messagesEl.appendChild(div);
   messagesEl.scrollTop = messagesEl.scrollHeight;
   return div;
@@ -17,6 +105,15 @@ function addErrorBanner(text) {
   div.textContent = `⚠ ${text}`;
   messagesEl.appendChild(div);
   messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function addThinkingIndicator() {
+  const div = document.createElement("div");
+  div.className = "bubble assistant thinking";
+  div.innerHTML = "<span class=\"dot\"></span><span class=\"dot\"></span><span class=\"dot\"></span>";
+  messagesEl.appendChild(div);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+  return div;
 }
 
 function addConfirmCards(pending) {
@@ -63,7 +160,7 @@ async function postJSON(url, body) {
   const resp = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
+    body: JSON.stringify(body || {}),
   });
   if (resp.status === 401) {
     window.location.href = "/chat/login";
@@ -91,14 +188,17 @@ function handleResponse(data) {
 
 async function resolveConfirmation(toolUseId, decision, cardEl) {
   cardEl.querySelectorAll("button").forEach((b) => (b.disabled = true));
+  const thinking = addThinkingIndicator();
   try {
     const data = await postJSON("/chat/api/confirm", {
       tool_use_id: toolUseId,
       decision,
     });
+    thinking.remove();
     cardEl.remove();
     handleResponse(data);
   } catch (e) {
+    thinking.remove();
     addErrorBanner(e.message);
     setComposerEnabled(true);
   }
@@ -111,11 +211,28 @@ form.addEventListener("submit", async (e) => {
   addBubble("user", text);
   input.value = "";
   setComposerEnabled(false);
+  const thinking = addThinkingIndicator();
   try {
     const data = await postJSON("/chat/api/message", { message: text });
+    thinking.remove();
     handleResponse(data);
   } catch (err) {
+    thinking.remove();
     addErrorBanner(err.message);
     setComposerEnabled(true);
+  }
+});
+
+clearBtn.addEventListener("click", async () => {
+  clearBtn.disabled = true;
+  try {
+    await postJSON("/chat/api/clear");
+    messagesEl.innerHTML = "";
+    setComposerEnabled(true);
+    input.focus();
+  } catch (e) {
+    addErrorBanner(e.message);
+  } finally {
+    clearBtn.disabled = false;
   }
 });

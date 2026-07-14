@@ -76,6 +76,7 @@ def _build_asgi_app(server: FastMCP):
         Route("/chat/logout", chat_routes.logout, methods=["POST"]),
         Route("/chat/api/message", chat_routes.api_message, methods=["POST"]),
         Route("/chat/api/confirm", chat_routes.api_confirm, methods=["POST"]),
+        Route("/chat/api/clear", chat_routes.api_clear, methods=["POST"]),
         Mount("/chat/static", app=StaticFiles(directory=str(static_dir))),
         Mount("/", app=mcp_app),  # catch-all — must stay last
     ]
