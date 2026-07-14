@@ -6,8 +6,16 @@ pytest test suite. All automated tests live here.
 
 ```
 tests/
-    conftest.py         Shared fixtures and pytest configuration
-    test_imports.py     Import validation — confirms modules load without env vars
+    conftest.py            Shared fixtures and pytest configuration
+    test_imports.py        Import validation — confirms modules load without env vars
+    test_models.py         Recipe/RecipeItem models, steps-in-description parsing
+    test_recipes_tools.py  Recipe tool handlers (update merging, schema audit)
+    test_chat_dispatch.py  Chat tool-registry/dispatch drift-detection, schema caching
+    test_chat_agent.py     Chat agent tool-calling loop, destructive-tool confirmation gating
+    test_chat_sessions.py  Chat session lifecycle — reuse, TTL/size pruning, reset
+    test_chat_config.py    Chat settings validation (validate_chat_settings)
+    test_chat_http.py      Chat HTTP routes/middleware via Starlette TestClient,
+                            including the /mcp-is-never-gated isolation guarantee
 ```
 
 ## Running tests

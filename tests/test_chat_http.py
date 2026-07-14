@@ -43,8 +43,12 @@ class FakeMessage:
 class FakeMessagesResource:
     def __init__(self, responses: list[FakeMessage]) -> None:
         self._responses = list(responses)
+        self.calls: list[dict] = []
 
     async def create(self, **kwargs) -> FakeMessage:
+        # snapshot messages — the caller mutates the same list object after
+        # this returns (appending the assistant reply), so store a copy.
+        self.calls.append({**kwargs, "messages": list(kwargs["messages"])})
         return self._responses.pop(0)
 
 
@@ -98,6 +102,12 @@ def test_unauthenticated_api_message_returns_401(chat_app):
         resp = client.post(
             "/chat/api/message", json={"message": "hi"}, follow_redirects=False
         )
+        assert resp.status_code == 401
+
+
+def test_unauthenticated_api_clear_returns_401(chat_app):
+    with _client(chat_app) as client:
+        resp = client.post("/chat/api/clear", follow_redirects=False)
         assert resp.status_code == 401
 
 
@@ -208,3 +218,33 @@ def test_full_conversation_with_destructive_confirmation(chat_app, monkeypatch):
             "text": "Deleted the chili recipe.",
         }
         assert delete_calls == [7]
+
+
+def test_api_clear_resets_conversation_history(chat_app, monkeypatch):
+    tool_schemas._CACHED_TOOLS = []
+    fake = FakeAnthropicClient(
+        [
+            FakeMessage([FakeTextBlock("Hi there!")], "end_turn"),
+            FakeMessage([FakeTextBlock("Hi again!")], "end_turn"),
+        ]
+    )
+    monkeypatch.setattr(agent, "_get_anthropic_client", lambda: fake)
+
+    with _client(chat_app) as client:
+        client.post("/chat/login", data={"password": "correct-horse"})
+
+        first = client.post("/chat/api/message", json={"message": "hello"})
+        assert first.status_code == 200
+
+        clear_resp = client.post("/chat/api/clear")
+        assert clear_resp.status_code == 200
+        assert clear_resp.json() == {"status": "cleared"}
+
+        second = client.post("/chat/api/message", json={"message": "hello again"})
+        assert second.status_code == 200
+
+    # the second call's message history should only contain the new user
+    # message and the assistant's reply to it — not the pre-clear turn
+    second_call_messages = fake.messages.calls[-1]["messages"]
+    assert len(second_call_messages) == 1
+    assert second_call_messages[0] == {"role": "user", "content": "hello again"}

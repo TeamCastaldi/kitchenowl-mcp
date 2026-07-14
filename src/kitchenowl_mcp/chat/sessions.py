@@ -46,6 +46,12 @@ def _prune_sessions() -> None:
             del SESSIONS[s.id]
 
 
+def reset_session(session: ChatSession) -> None:
+    session.messages = []
+    session.pending_tool_uses = []
+    session.pending_ready_results = []
+
+
 def get_or_create_session(request: Request) -> ChatSession:
     sid = request.session.get("chat_session_id")
     if sid is None or sid not in SESSIONS:

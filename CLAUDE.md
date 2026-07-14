@@ -11,11 +11,12 @@ This file provides context for Claude (and other LLM assistants) working in this
 ## Stack
 
 - **Runtime:** Python 3.11+
-- **MCP framework:** FastMCP 2.x (streamable-http transport)
+- **MCP framework:** FastMCP (`>=2.0.0` in pyproject.toml; 3.4.2 pinned via uv.lock), streamable-http transport
 - **HTTP client:** httpx (async)
-- **Config:** pydantic-settings (reads `KITCHENOWL_*` env vars)
+- **Config:** pydantic-settings (reads `KITCHENOWL_*` env vars, plus `CHAT_*`/`AUTHENTIK_*`/`ANTHROPIC_*` when the chat UI is enabled)
 - **Linter/formatter:** ruff
 - **Tests:** pytest
+- **Chat UI (optional):** Starlette, Authlib (OIDC), anthropic SDK, uvicorn, itsdangerous
 
 ## Architecture
 
@@ -38,8 +39,8 @@ kitchenowl-back  (existing KitchenOwl container)
 - `src/kitchenowl_mcp/state.py` — module-level `_client` singleton; initialized in server lifespan, accessed by tools via `get_client()`
 - `src/kitchenowl_mcp/tools/` — one file per domain (recipes, shopping, meal_plan); plain async functions registered in server.py via `mcp.add_tool()`; `tools/registry.py` holds `ALL_TOOLS`, the single list both `server.py` and the chat agent build from, so they can never drift apart
 - `src/kitchenowl_mcp/server.py` — FastMCP app, lifespan hook (health-checks KitchenOwl at startup), tool registration, `main()` entry point; `_build_asgi_app()` wraps the MCP app in a bigger Starlette app when `ENABLE_CHAT_UI=true` (see below)
-- `src/kitchenowl_mcp/chat/` — optional embedded browser chat (off by default). `sessions.py` (in-memory `ChatSession`s), `dispatch.py` (`TOOL_FUNCTIONS`/`DESTRUCTIVE_TOOLS`), `tool_schemas.py` (builds Anthropic tool defs from `server.list_tools()`, primed once at startup), `agent.py` (manual tool-calling loop with destructive-tool confirmation gating), `auth.py` (shared-password + Authentik/Authlib OIDC), `middleware.py` (`ChatAuthGateMiddleware`, scoped strictly to `/chat*`), `routes.py` (page/login/oidc/api handlers)
-- `src/kitchenowl_mcp/static/chat/` — the chat frontend: plain HTML/CSS/JS, no build step, no framework
+- `src/kitchenowl_mcp/chat/` — optional embedded browser chat (off by default). `sessions.py` (in-memory `ChatSession`s, TTL/max-size pruning, `reset_session()` for the "New chat" action), `dispatch.py` (`TOOL_FUNCTIONS`/`DESTRUCTIVE_TOOLS`), `tool_schemas.py` (builds Anthropic tool defs from `server.list_tools()`, primed once at startup), `agent.py` (manual tool-calling loop with destructive-tool confirmation gating), `auth.py` (shared-password + Authentik/Authlib OIDC), `middleware.py` (`ChatAuthGateMiddleware`, scoped strictly to `/chat*`), `routes.py` (page/login/oidc/api handlers, including `api_clear`)
+- `src/kitchenowl_mcp/static/chat/` — the chat frontend: plain HTML/CSS/JS, no build step, no framework. Assistant replies render through a small hand-rolled markdown-to-HTML pass in `app.js` (bold/italic/code/headings/lists/links; input is HTML-escaped first so tool-result content can't inject markup); a thinking indicator shows while a request is in flight; header has "New chat" (calls `POST /chat/api/clear`, disabled for the same span as the composer to avoid resetting mid-request) and "Log out"
 
 ## Constraints (non-negotiable)
 
@@ -75,14 +76,15 @@ kitchenowl-back  (existing KitchenOwl container)
 - Dockerfile for container deployment
 - Deployed via Docker Compose
 - CI: ruff + pytest
-- Embedded family chat UI (`ENABLE_CHAT_UI`, off by default): browser chat backed by the Anthropic Messages API, wired directly to the same 13 tool functions the MCP server registers (in-process calls, not through MCP's JSON-RPC transport). Two parallel login methods, either sufficient — shared household password, or Authentik OIDC (Authlib). `delete_recipe`, `clear_checked_items`, and `update_recipe` are gated behind an explicit confirm/cancel step in the UI before they execute — the LLM can propose them but never runs them unconfirmed. Chat history is ephemeral/in-memory only (lost on restart). `/mcp` (claude.ai's path) is untouched: `ChatAuthGateMiddleware` only intercepts paths starting with `/chat`, and when the feature is disabled none of the Starlette/middleware wrapping is constructed at all — `main()` calls `server.run(...)` exactly as before. Verified with `pytest` (unit tests for the confirmation-gating loop with a stubbed Anthropic client, and `TestClient`-based HTTP tests including the `/mcp`-is-never-gated isolation guarantee and a full login→message→confirm round trip). Not yet verified against a live Anthropic key or the real Authentik instance — that's manual/operator-side, done at actual deploy time.
+- Embedded family chat UI (`ENABLE_CHAT_UI`, off by default): browser chat backed by the Anthropic Messages API, wired directly to the same 13 tool functions the MCP server registers (in-process calls, not through MCP's JSON-RPC transport). Two parallel login methods, either sufficient — shared household password, or Authentik OIDC (Authlib). `delete_recipe`, `clear_checked_items`, and `update_recipe` are gated behind an explicit confirm/cancel step in the UI before they execute — the LLM can propose them but never runs them unconfirmed. Chat history is ephemeral/in-memory only (lost on restart, and bounded in a running process by a 24h TTL / 500-session cap in `chat/sessions.py`). `/mcp` (claude.ai's path) is untouched: `ChatAuthGateMiddleware` only intercepts paths starting with `/chat`, and when the feature is disabled none of the Starlette/middleware wrapping is constructed at all — `main()` calls `server.run(...)` exactly as before. Verified with `pytest` (unit tests for the confirmation-gating loop with a stubbed Anthropic client, and `TestClient`-based HTTP tests including the `/mcp`-is-never-gated isolation guarantee and a full login→message→confirm round trip)
+- **Chat UI is deployed and confirmed working on heimdall** — both login methods verified live (shared password, and Authentik OIDC after correcting the application slug in `AUTHENTIK_ISSUER` and adding the redirect URI to the provider's allow-list)
+- Chat UI UX follow-ups, all shipped: a "Log out" button in the header; markdown rendering for assistant replies (hand-rolled parser in `app.js`, no external library — bold/italic/code/headings/lists/links, HTML-escaped first); an animated "thinking" indicator while a request is in flight; a "New chat" button (`POST /chat/api/clear` + `chat/sessions.py:reset_session`) that resets both the visible conversation and the server-side session state, with the button disabled for the same span as the composer to prevent a mid-request reset from letting a stale response leak back into the cleared session
 
 ### Not started
 
 - `check_shopping_item` tool (needed to fully validate `clear_checked_items` end-to-end)
 - Structured logging
 - Per-user token mapping (v2, OpenWebUI)
-- Chat UI deploy: registering the Authentik OIDC application, setting the new env vars on heimdall's compose stack, and flipping `ENABLE_CHAT_UI=true` there — all operator-side, not done in this session
 
 ## Open questions
 
@@ -107,4 +109,4 @@ kitchenowl-back  (existing KitchenOwl container)
 
 ---
 
-*Last updated: 2026-07-13 | Session: embedded family chat UI (Anthropic + Authentik/password auth, destructive-tool confirmation gating)*
+*Last updated: 2026-07-14 | Session: chat UI deployed and verified live (password + Authentik); added logout button, markdown rendering, thinking indicator, and New chat (`/chat/api/clear`)*
