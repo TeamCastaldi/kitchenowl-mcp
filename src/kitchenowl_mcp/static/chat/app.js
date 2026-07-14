@@ -154,6 +154,11 @@ function addConfirmCards(pending) {
 function setComposerEnabled(enabled) {
   input.disabled = !enabled;
   form.querySelector("button").disabled = !enabled;
+  // Disabled for the same span as the composer: prevents "New chat" from
+  // resetting the session mid-flight, which would otherwise let an
+  // in-flight /chat/api/message or /chat/api/confirm response append its
+  // reply back into the just-cleared session.
+  clearBtn.disabled = !enabled;
 }
 
 async function postJSON(url, body) {
