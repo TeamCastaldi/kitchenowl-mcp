@@ -2,6 +2,7 @@ const messagesEl = document.getElementById("messages");
 const form = document.getElementById("composer");
 const input = document.getElementById("input");
 const clearBtn = document.getElementById("clear-btn");
+const quickActionsEl = document.getElementById("quick-actions");
 
 function escapeHtml(str) {
   return str
@@ -176,6 +177,7 @@ function setComposerEnabled(enabled) {
   // in-flight /chat/api/message or /chat/api/confirm response append its
   // reply back into the just-cleared session.
   clearBtn.disabled = !enabled;
+  quickActionsEl.querySelectorAll("button").forEach((b) => (b.disabled = !enabled));
 }
 
 async function postJSON(url, body) {
@@ -226,12 +228,8 @@ async function resolveConfirmation(toolUseId, decision, cardEl) {
   }
 }
 
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const text = input.value.trim();
-  if (!text) return;
-  addBubble("user", text);
-  input.value = "";
+async function sendMessage(text, displayText) {
+  addBubble("user", displayText || text);
   setComposerEnabled(false);
   const thinking = addThinkingIndicator();
   try {
@@ -243,6 +241,21 @@ form.addEventListener("submit", async (e) => {
     addErrorBanner(err.message);
     setComposerEnabled(true);
   }
+}
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = "";
+  sendMessage(text);
+});
+
+quickActionsEl.querySelectorAll(".chip").forEach((chip) => {
+  chip.addEventListener("click", () => {
+    if (chip.disabled) return;
+    sendMessage(chip.dataset.prompt, chip.textContent);
+  });
 });
 
 clearBtn.addEventListener("click", async () => {

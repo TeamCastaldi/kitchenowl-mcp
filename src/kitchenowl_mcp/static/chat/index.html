@@ -18,6 +18,11 @@
     </div>
   </header>
   <div id="messages"></div>
+  <div id="quick-actions" class="quick-actions">
+    <button type="button" class="chip" data-prompt="Show my meal plan: list each planned recipe's title alongside its planned date, in date order.">Show meal plan</button>
+    <button type="button" class="chip" data-prompt="Show my current shopping list.">Show grocery list</button>
+    <button type="button" class="chip" data-prompt="I want to create a new recipe. Interview me first, one question at a time: what ingredients I have on hand or want to use, how many people it should serve, any allergies or dietary restrictions to avoid, and any other preferences (cuisine, time budget, etc). Only draft the recipe once you have enough to work with.">Create new recipe</button>
+  </div>
   <form id="composer" autocomplete="off">
     <input type="text" id="input" placeholder="Ask about recipes, shopping list, meal plan…" autofocus>
     <button type="submit" class="primary">Send</button>
