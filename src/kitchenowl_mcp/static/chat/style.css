@@ -31,7 +31,9 @@
   box-sizing: border-box;
 }
 
+html,
 body {
+  height: 100%;
   margin: 0;
   background: var(--bg);
   color: var(--fg);
@@ -41,12 +43,13 @@ body {
 .wrap {
   max-width: 640px;
   margin: 0 auto;
-  min-height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
 }
 
 header {
+  flex-shrink: 0;
   padding: 1rem;
   border-bottom: 1px solid var(--border);
   display: flex;
@@ -77,6 +80,7 @@ header h1 {
 
 #messages {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   padding: 1rem;
   display: flex;
@@ -246,6 +250,7 @@ button:disabled {
 }
 
 .quick-actions {
+  flex-shrink: 0;
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
@@ -267,6 +272,7 @@ button:disabled {
 }
 
 form#composer {
+  flex-shrink: 0;
   display: flex;
   gap: 0.5rem;
   padding: 1rem;
