@@ -46,9 +46,23 @@ def _get_anthropic_client() -> anthropic.AsyncAnthropic:
     global _anthropic_client
     if _anthropic_client is None:
         _anthropic_client = anthropic.AsyncAnthropic(
-            api_key=get_settings().anthropic_api_key
+            api_key=get_settings().anthropic_api_key,
+            # Anthropic's API returns 529 Overloaded during load spikes; the
+            # default of 2 retries often isn't enough to ride one out.
+            max_retries=5,
         )
     return _anthropic_client
+
+
+# Transient upstream conditions worth telling the user "try again" about,
+# as opposed to a genuine bug in our own request.
+RETRYABLE_ANTHROPIC_ERRORS = (
+    anthropic.OverloadedError,
+    anthropic.InternalServerError,
+    anthropic.RateLimitError,
+    anthropic.APIConnectionError,
+    anthropic.APITimeoutError,
+)
 
 
 async def handle_user_message(session: ChatSession, user_text: str) -> dict:

@@ -113,6 +113,12 @@ async def api_message(request: Request) -> JSONResponse:
         result = await agent.handle_user_message(session, message)
     except agent.ConflictError as e:
         return JSONResponse({"error": str(e)}, status_code=409)
+    except agent.RETRYABLE_ANTHROPIC_ERRORS:
+        logger.warning("chat message handling hit a retryable Anthropic error")
+        return JSONResponse(
+            {"error": "Claude's API is temporarily overloaded — please try again."},
+            status_code=503,
+        )
     except Exception:
         logger.exception("chat message handling failed")
         return JSONResponse({"error": "internal error"}, status_code=502)
@@ -139,6 +145,12 @@ async def api_confirm(request: Request) -> JSONResponse:
         result = await agent.handle_confirmation(session, tool_use_id, decision)
     except agent.UnknownConfirmationError as e:
         return JSONResponse({"error": str(e)}, status_code=404)
+    except agent.RETRYABLE_ANTHROPIC_ERRORS:
+        logger.warning("chat confirmation handling hit a retryable Anthropic error")
+        return JSONResponse(
+            {"error": "Claude's API is temporarily overloaded — please try again."},
+            status_code=503,
+        )
     except Exception:
         logger.exception("chat confirmation handling failed")
         return JSONResponse({"error": "internal error"}, status_code=502)
