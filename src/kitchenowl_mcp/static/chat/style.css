@@ -245,6 +245,27 @@ button:disabled {
   cursor: not-allowed;
 }
 
+.quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0 1rem 1rem;
+}
+
+.chip {
+  font-size: 0.85rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  background: var(--bubble-assistant);
+  color: var(--bubble-assistant-fg);
+  border-color: var(--border);
+}
+
+.chip:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 form#composer {
   display: flex;
   gap: 0.5rem;

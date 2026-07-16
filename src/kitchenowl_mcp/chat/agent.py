@@ -1,3 +1,4 @@
+import datetime
 import json
 import logging
 
@@ -9,7 +10,7 @@ from .sessions import ChatSession, PendingConfirmation
 
 logger = logging.getLogger(__name__)
 
-SYSTEM_PROMPT = (
+SYSTEM_PROMPT_TEMPLATE = (
     "You are a household assistant with access to this family's KitchenOwl "
     "instance: recipes, shopping list, and meal plan. Use the available "
     "tools to answer questions and make changes. Be concise. When you list "
@@ -17,8 +18,17 @@ SYSTEM_PROMPT = (
     "starting at 1 and incrementing by 1 through the last item — never "
     "repeat '1.' for every entry. If the user later refers to an item by "
     "its number (e.g. 'tell me more about #2' or 'add 3 to the meal "
-    "plan'), resolve it against the most recent numbered list you sent."
+    "plan'), resolve it against the most recent numbered list you sent. "
+    "Today's date is {today} — use it to resolve relative dates and to "
+    "pick a sensible start_date/end_date range (e.g. today through 14 "
+    "days out) when the user asks to see the meal plan without giving "
+    "explicit dates."
 )
+
+
+def _build_system_prompt() -> str:
+    today = datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%d")
+    return SYSTEM_PROMPT_TEMPLATE.format(today=today)
 
 
 class ConflictError(Exception):
@@ -83,7 +93,7 @@ async def _run_loop(session: ChatSession) -> dict:
         response = await client.messages.create(
             model=settings.anthropic_model,
             max_tokens=settings.chat_max_tokens,
-            system=SYSTEM_PROMPT,
+            system=_build_system_prompt(),
             tools=tool_schemas.get_anthropic_tools(),
             messages=session.messages,
         )
