@@ -46,9 +46,18 @@ function renderMarkdown(raw) {
 
     if (/^[-*]\s+/.test(line)) {
       const items = [];
-      while (i < lines.length && /^[-*]\s+/.test(lines[i])) {
-        items.push(`<li>${renderInline(lines[i].replace(/^[-*]\s+/, ""))}</li>`);
-        i++;
+      while (i < lines.length) {
+        if (/^[-*]\s+/.test(lines[i])) {
+          items.push(`<li>${renderInline(lines[i].replace(/^[-*]\s+/, ""))}</li>`);
+          i++;
+        } else if (lines[i].trim() === "" && /^[-*]\s+/.test(lines[i + 1] || "")) {
+          // Blank line between items of the same list ("loose" list) —
+          // skip it rather than ending the list, so the items still
+          // render as one <ul> instead of several single-item ones.
+          i++;
+        } else {
+          break;
+        }
       }
       html.push(`<ul>${items.join("")}</ul>`);
       continue;
@@ -56,9 +65,17 @@ function renderMarkdown(raw) {
 
     if (/^\d+\.\s+/.test(line)) {
       const items = [];
-      while (i < lines.length && /^\d+\.\s+/.test(lines[i])) {
-        items.push(`<li>${renderInline(lines[i].replace(/^\d+\.\s+/, ""))}</li>`);
-        i++;
+      while (i < lines.length) {
+        if (/^\d+\.\s+/.test(lines[i])) {
+          items.push(`<li>${renderInline(lines[i].replace(/^\d+\.\s+/, ""))}</li>`);
+          i++;
+        } else if (lines[i].trim() === "" && /^\d+\.\s+/.test(lines[i + 1] || "")) {
+          // Same "loose list" handling as above — a blank separator line
+          // shouldn't split the list and reset the <ol> numbering to 1.
+          i++;
+        } else {
+          break;
+        }
       }
       html.push(`<ol>${items.join("")}</ol>`);
       continue;
