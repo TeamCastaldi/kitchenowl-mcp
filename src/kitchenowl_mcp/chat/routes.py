@@ -114,7 +114,9 @@ async def api_message(request: Request) -> JSONResponse:
     except agent.ConflictError as e:
         return JSONResponse({"error": str(e)}, status_code=409)
     except agent.RETRYABLE_ANTHROPIC_ERRORS:
-        logger.warning("chat message handling hit a retryable Anthropic error")
+        logger.warning(
+            "chat message handling hit a retryable Anthropic error", exc_info=True
+        )
         return JSONResponse(
             {"error": "Claude's API is temporarily overloaded — please try again."},
             status_code=503,
@@ -146,7 +148,9 @@ async def api_confirm(request: Request) -> JSONResponse:
     except agent.UnknownConfirmationError as e:
         return JSONResponse({"error": str(e)}, status_code=404)
     except agent.RETRYABLE_ANTHROPIC_ERRORS:
-        logger.warning("chat confirmation handling hit a retryable Anthropic error")
+        logger.warning(
+            "chat confirmation handling hit a retryable Anthropic error", exc_info=True
+        )
         return JSONResponse(
             {"error": "Claude's API is temporarily overloaded — please try again."},
             status_code=503,

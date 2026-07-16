@@ -223,6 +223,8 @@ def test_full_conversation_with_destructive_confirmation(chat_app, monkeypatch):
 
 
 def test_overloaded_anthropic_error_returns_friendly_503(chat_app, monkeypatch):
+    tool_schemas._CACHED_TOOLS = []
+
     class OverloadedMessagesResource:
         async def create(self, **kwargs):
             response = httpx.Response(529, request=httpx.Request("POST", "http://x"))
