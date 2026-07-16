@@ -1,3 +1,5 @@
+import anthropic
+import httpx
 import pytest
 from starlette.testclient import TestClient
 
@@ -218,6 +220,26 @@ def test_full_conversation_with_destructive_confirmation(chat_app, monkeypatch):
             "text": "Deleted the chili recipe.",
         }
         assert delete_calls == [7]
+
+
+def test_overloaded_anthropic_error_returns_friendly_503(chat_app, monkeypatch):
+    tool_schemas._CACHED_TOOLS = []
+
+    class OverloadedMessagesResource:
+        async def create(self, **kwargs):
+            response = httpx.Response(529, request=httpx.Request("POST", "http://x"))
+            raise anthropic.OverloadedError("overloaded", response=response, body=None)
+
+    class OverloadedClient:
+        messages = OverloadedMessagesResource()
+
+    monkeypatch.setattr(agent, "_get_anthropic_client", lambda: OverloadedClient())
+
+    with _client(chat_app) as client:
+        client.post("/chat/login", data={"password": "correct-horse"})
+        resp = client.post("/chat/api/message", json={"message": "hello"})
+        assert resp.status_code == 503
+        assert "overloaded" in resp.json()["error"].lower()
 
 
 def test_api_clear_resets_conversation_history(chat_app, monkeypatch):

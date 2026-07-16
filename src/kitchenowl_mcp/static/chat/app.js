@@ -191,7 +191,15 @@ async function postJSON(url, body) {
     throw new Error("not authenticated");
   }
   if (!resp.ok) {
-    throw new Error(`request failed: ${resp.status}`);
+    let message = `request failed: ${resp.status}`;
+    try {
+      const data = await resp.json();
+      if (data && data.error) message = data.error;
+    } catch {
+      // Response body wasn't JSON (or was empty) — stick with the
+      // generic status-code message above.
+    }
+    throw new Error(message);
   }
   return resp.json();
 }
