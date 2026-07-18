@@ -1,6 +1,8 @@
 import asyncio
 from contextlib import contextmanager
 
+import pytest
+
 from kitchenowl_mcp import state
 from kitchenowl_mcp.tools import recipes
 
@@ -89,6 +91,29 @@ def test_create_recipe_carries_quantity_for_dict_ingredients() -> None:
     assert items_by_name["flour"]["description"] == "2 cups"
     assert items_by_name["salt"]["description"] == ""
     assert items_by_name["eggs"]["description"] == "3"
+
+
+def test_update_recipe_carries_quantity_for_dict_ingredients() -> None:
+    with _active_client(_make_fake_client()) as client:
+        asyncio.run(
+            recipes.update_recipe(
+                1,
+                ingredients=[
+                    {"name": "flour", "amount": "2", "unit": "cups"},
+                    "salt",
+                ],
+            )
+        )
+
+    items_by_name = {i["name"]: i for i in client.update_payload["items"]}
+    assert items_by_name["flour"]["description"] == "2 cups"
+    assert items_by_name["salt"]["description"] == ""
+
+
+def test_resolve_ingredient_items_rejects_malformed_dict_entry() -> None:
+    with _active_client(FakeKitchenOwlClient()) as client:
+        with pytest.raises(ValueError, match="non-empty 'name'"):
+            asyncio.run(recipes.resolve_ingredient_items(client, [{"amount": "2"}]))
 
 
 def test_audit_flags_legacy_recipe_missing_ingredients_and_blank_item_name() -> None:

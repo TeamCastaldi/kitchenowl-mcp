@@ -14,6 +14,16 @@ from ..models import (
 logger = logging.getLogger(__name__)
 
 
+def _ingredient_name(entry: str | dict) -> str:
+    name = entry.get("name") if isinstance(entry, dict) else entry
+    if not isinstance(name, str) or not name.strip():
+        raise ValueError(
+            "Each ingredient must be a non-empty name string, or a dict with a "
+            f"non-empty 'name' string; got {entry!r}"
+        )
+    return name
+
+
 async def resolve_ingredient_items(
     client: KitchenOwlClient, ingredients: list[str | dict]
 ) -> list[RecipeItem]:
@@ -26,7 +36,7 @@ async def resolve_ingredient_items(
     has to carry quantity, mirroring the shopping-list item convention in
     client.py's add_shopping_item.
     """
-    names = [e["name"] if isinstance(e, dict) else e for e in ingredients]
+    names = [_ingredient_name(e) for e in ingredients]
     catalog = await client.list_items() if names else []
     catalog_by_key: dict[str, dict] = {
         key: item
@@ -226,7 +236,9 @@ async def audit_recipe_schema() -> dict:
     until the recipe is next edited via update_recipe), recipes with no
     ingredients, ingredient items with a blank name, and recipes where
     every ingredient is missing quantity info (description empty on every
-    item) — a signal the recipe was imported before create_recipe/
+    item). This is a heuristic, not a certainty — it also catches recipes
+    that legitimately have no recorded quantities — but it's a reasonable
+    starting point for finding recipes imported before create_recipe/
     update_recipe supported the {"name", "amount", "unit"} ingredient form,
     back when quantities were silently dropped. Read-only — fixing flagged
     recipes is a separate update_recipe() call. Returns a summary plus the
