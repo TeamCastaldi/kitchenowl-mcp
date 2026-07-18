@@ -15,11 +15,19 @@ logger = logging.getLogger(__name__)
 
 
 async def resolve_ingredient_items(
-    client: KitchenOwlClient, ingredient_names: list[str]
+    client: KitchenOwlClient, ingredients: list[str | dict]
 ) -> list[RecipeItem]:
-    """Resolve ingredient name strings against the household item catalog,
-    creating new catalog entries for unmatched names."""
-    catalog = await client.list_items() if ingredient_names else []
+    """Resolve ingredient entries against the household item catalog,
+    creating new catalog entries for unmatched names.
+
+    Each entry is either a bare name string (no quantity) or a dict
+    {"name": ..., "amount": ..., "unit": ...} — amount/unit are folded into
+    the item's description, the only place KitchenOwl's recipe-item schema
+    has to carry quantity, mirroring the shopping-list item convention in
+    client.py's add_shopping_item.
+    """
+    names = [e["name"] if isinstance(e, dict) else e for e in ingredients]
+    catalog = await client.list_items() if names else []
     catalog_by_key: dict[str, dict] = {
         key: item
         for item in catalog
@@ -31,7 +39,7 @@ async def resolve_ingredient_items(
     }
 
     items = []
-    for ingredient_name in ingredient_names:
+    for entry, ingredient_name in zip(ingredients, names, strict=True):
         lookup_key = ingredient_name.lower().strip()
         existing = catalog_by_key.get(lookup_key)
         if existing:
@@ -46,7 +54,15 @@ async def resolve_ingredient_items(
                     "default_key": lookup_key.replace(" ", "_"),
                 }
             )
-        items.append(RecipeItem(name=resolved.get("name", ingredient_name.strip())))
+        quantity = ""
+        if isinstance(entry, dict):
+            quantity = f"{entry.get('amount', '')} {entry.get('unit', '')}".strip()
+        items.append(
+            RecipeItem(
+                name=resolved.get("name", ingredient_name.strip()),
+                description=quantity,
+            )
+        )
     return items
 
 
@@ -96,13 +112,19 @@ def _normalize_recipe(raw: dict) -> dict:
 async def create_recipe(
     name: str,
     description: str = "",
-    ingredients: list[str] | None = None,
+    ingredients: list[str | dict] | None = None,
     steps: list[str] | None = None,
     tags: list[str] | None = None,
 ) -> dict:
     """Create a new recipe in KitchenOwl.
 
-    Each ingredient is a name string (e.g. ["eggs", "butter", "sugar"]).
+    Each ingredient is either a bare name string (e.g. "eggs", no quantity)
+    or a dict carrying quantity: {"name": "flour", "amount": "2", "unit": "cups"}.
+    Always prefer the dict form when the source recipe states a quantity —
+    omitting amount/unit silently drops it, which is the #1 cause of
+    imported recipes looking wrong in KitchenOwl (bare ingredient names with
+    no measurements). "amount" and "unit" are optional within the dict (e.g.
+    {"name": "salt", "amount": "to taste"} is fine).
     The tool looks up each name in the household item catalog and creates a
     new catalog entry if none matches. Steps are plain text strings in order.
     Tags are tag name strings. Returns the created recipe including its new id.
@@ -123,7 +145,7 @@ async def update_recipe(
     recipe_id: int,
     name: str | None = None,
     description: str | None = None,
-    ingredients: list[str] | None = None,
+    ingredients: list[str | dict] | None = None,
     steps: list[str] | None = None,
     tags: list[str] | None = None,
 ) -> dict:
@@ -133,6 +155,10 @@ async def update_recipe(
     description and steps update independently without clobbering each
     other — pass steps=[] to clear steps while keeping description, or
     description="" to clear description while keeping steps.
+    ingredients, if passed, REPLACES the full existing ingredient list —
+    each entry is either a bare name string (no quantity) or a dict
+    {"name": "flour", "amount": "2", "unit": "cups"}; prefer the dict form
+    whenever a quantity is known, since a bare name silently drops it.
     Tags replace the full existing tag set (pass [] to clear all tags).
     Use search_recipes() to find the recipe_id.
     """
@@ -198,9 +224,13 @@ async def audit_recipe_schema() -> dict:
     (numbered steps embedded directly in description with no heading —
     these read back as unstructured free text with no separate steps list
     until the recipe is next edited via update_recipe), recipes with no
-    ingredients, and ingredient items with a blank name. Read-only —
-    fixing flagged recipes is a separate update_recipe() call. Returns a
-    summary plus the list of flagged recipes with reasons.
+    ingredients, ingredient items with a blank name, and recipes where
+    every ingredient is missing quantity info (description empty on every
+    item) — a signal the recipe was imported before create_recipe/
+    update_recipe supported the {"name", "amount", "unit"} ingredient form,
+    back when quantities were silently dropped. Read-only — fixing flagged
+    recipes is a separate update_recipe() call. Returns a summary plus the
+    list of flagged recipes with reasons.
     """
     recipes = await state.get_client().list_recipes(limit=500)
 
@@ -214,6 +244,8 @@ async def audit_recipe_schema() -> dict:
             issues.append("no_ingredients")
         if any(not (i.get("name") or "").strip() for i in items):
             issues.append("item_missing_name")
+        if items and all(not (i.get("description") or "").strip() for i in items):
+            issues.append("all_ingredients_missing_quantity")
         if issues:
             flagged.append({"id": r.get("id"), "name": r.get("name"), "issues": issues})
 
