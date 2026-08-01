@@ -1,0 +1,716 @@
+[
+  {
+    "id": 1,
+    "name": "Scrambled Eggs",
+    "description": "Level 1 — The most forgiving egg technique. Focus: heat control and knowing when to pull early. Silky, not rubbery.",
+    "tags": ["breakfast", "eggs", "technique"],
+    "items": [
+      {"name": "Butter", "description": ""},
+      {"name": "Eggs", "description": ""},
+      {"name": "Oat milk", "description": ""},
+      {"name": "Salt", "description": ""}
+    ],
+    "steps": [
+      "Crack eggs into a bowl — not the pan. Fish out any shell with a wet fingertip (shell chases shell).",
+      "Add a small splash of oat milk or water and a pinch of salt. Whisk until fully combined — no streaks.",
+      "Place a non-stick pan or cast iron over medium-low heat. Add a small pat of butter or Earth Balance.",
+      "When the butter melts and foams (not browns), pour in the eggs.",
+      "Let sit 10 seconds untouched, then gently push from the edges toward the center with a spatula.",
+      "Keep making slow, lazy folds. Don't rush — low heat is the secret.",
+      "When the eggs look almost done but still slightly shiny on top, pull the pan off the heat. Residual heat finishes them.",
+      "Plate immediately. Scrambled eggs keep cooking even off the stove — don't wait."
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Fried Eggs",
+    "description": "Level 2 — Learn to read visual doneness cues without breaking the yolk. Two styles: sunny side up and over easy.",
+    "tags": ["breakfast", "eggs", "technique"],
+    "items": [
+      {"name": "Butter", "description": ""},
+      {"name": "Eggs", "description": ""},
+      {"name": "Salt", "description": ""}
+    ],
+    "steps": [
+      "Heat a small non-stick pan over medium heat. Add a thin layer of butter or oil.",
+      "Crack the egg into a small bowl first, then gently slide it into the pan.",
+      "SUNNY SIDE UP: Leave it alone. When the white is fully set (no jiggle, no translucent spots) and edges are slightly crispy, it's done. The yolk stays runny on top.",
+      "OVER EASY: Once the white is set, slide a thin spatula fully under the egg and flip in one confident motion. Cook 20–30 more seconds. Yolk should still be runny inside.",
+      "Season with salt after plating.",
+      "The lesson: confidence with the spatula matters — hesitation breaks yolks. Practice the motion before committing."
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Hard Boiled Eggs",
+    "description": "Level 3 — Learn time-based cooking and the ice bath technique. No guesswork, just a timer and cold water.",
+    "tags": ["breakfast", "eggs", "technique"],
+    "items": [
+      {"name": "Eggs", "description": ""},
+      {"name": "ice", "description": ""}
+    ],
+    "steps": [
+      "Place eggs in a single layer in a saucepan. Cover with cold water by about an inch.",
+      "Bring to a full boil over high heat.",
+      "The moment it boils, turn the heat off, put the lid on, and set a timer: 9 minutes for fully set (no green ring), 7 minutes for a slightly jammy yolk.",
+      "While the timer runs, fill a bowl with ice water.",
+      "When the timer goes off, use a slotted spoon to move eggs straight into the ice water. Leave them at least 5 minutes.",
+      "To peel: gently crack on the counter all around, then peel under a thin stream of running water.",
+      "The lesson: the ice bath stops cooking immediately — this is why they don't turn gray-green."
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Classic Omelet",
+    "description": "Level 4 — The chef's exam. Coordination, speed, and technique. Expect the first one to be ugly. Focus on the motion, not the result.",
+    "tags": ["breakfast", "eggs", "technique"],
+    "items": [
+      {"name": "Butter", "description": ""},
+      {"name": "Eggs", "description": ""},
+      {"name": "Salt", "description": ""}
+    ],
+    "steps": [
+      "Whisk 2 eggs with a splash of water and a pinch of salt until completely uniform — no streaks.",
+      "Heat a non-stick pan over medium-high heat. Add butter and swirl to coat the whole pan.",
+      "When butter foams, pour in the eggs. Let sit 5 seconds.",
+      "Using a spatula, pull the cooked edges toward the center while tilting the pan so uncooked egg flows to the edges. Work all the way around.",
+      "When the top is just barely set (still slightly glossy), add any fillings to one half — cheese, herbs, sautéed vegetables, whatever you like.",
+      "Fold the unfilled half over the filled half.",
+      "Tilt the pan and roll or slide the omelet onto the plate seam-side down.",
+      "The lesson: the first omelet is always ugly. That's expected. Focus on the motion, not the result."
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Classic Poached Eggs",
+    "description": "A technique-forward recipe for perfectly poached eggs — silky whites, jammy yolk, no special equipment needed. High-protein, dairy-free, and on the table in under 15 minutes.\n\nServe simply: over thick toast with a drizzle of olive oil and flaky salt. Good with sliced avocado, a handful of arugula, or everything bagel seasoning if you have it. No sauce needed — the yolk is the sauce.",
+    "tags": ["breakfast", "eggs", "technique"],
+    "items": [
+      {"name": "Water", "description": ""},
+      {"name": "black pepper", "description": ""},
+      {"name": "bread or toast (optional, for serving)", "description": ""},
+      {"name": "eggs (2 per person)", "description": ""},
+      {"name": "fresh herbs (optional garnish)", "description": ""},
+      {"name": "kosher salt", "description": ""},
+      {"name": "white vinegar", "description": ""}
+    ],
+    "steps": []
+  },
+  {
+    "id": 6,
+    "name": "Pan Sauce Lesson — Garlic Herb Chicken Thighs",
+    "description": "A weeknight technique lesson built around pan sauce — the single most useful sauce skill in the home kitchen. Sear chicken thighs in your cast iron, then build a pan sauce in the same pan using fond, broth, garlic, and a dairy-free fat finish. Serves 3. Suzie: finished with Earth Balance or Miyoko's instead of butter — same technique, same result. Seraphina: mild heat, sauce can be served on the side.",
+    "tags": ["cast iron", "chicken", "dairy-free", "higher protein", "pan sauce", "sauce curriculum", "technique", "weeknight"],
+    "items": [
+      {"name": "Earth Balance or Miyoko's butter (2 tbsp) — dairy-free, works identically to butter here", "description": ""},
+      {"name": "black pepper", "description": ""},
+      {"name": "boneless skinless chicken thighs (about 1.5 lb)", "description": ""},
+      {"name": "fresh parsley, chopped (for garnish)", "description": ""},
+      {"name": "fresh thyme (3–4 sprigs, or 1/2 tsp dried)", "description": ""},
+      {"name": "garlic cloves, minced (3 cloves)", "description": ""},
+      {"name": "garlic powder", "description": ""},
+      {"name": "kosher salt", "description": ""},
+      {"name": "lemon juice (1 tbsp, about half a lemon)", "description": ""},
+      {"name": "low-sodium chicken broth (3/4 cup)", "description": ""},
+      {"name": "olive oil (1 tbsp)", "description": ""}
+    ],
+    "steps": [
+      "PREP (5 min): Pat chicken thighs completely dry with paper towels — this is non-negotiable for a good sear. Dry surface = browning. Wet surface = steaming. Season generously on both sides with salt, pepper, and a pinch of garlic powder.",
+      "SEAR (10–12 min): Heat your cast iron over medium-high until it just starts to smoke — a drop of water should skitter and evaporate instantly. Add 1 tbsp olive oil, then lay chicken thighs in smooth-side down. Don't touch them. Sear 6–7 min until they release easily and are deeply golden. Flip and cook another 4–5 min. Pull chicken when probe thermometer reads 165°F. Rest on a plate, tented loosely with foil.",
+      "UNDERSTAND THE PAN: Look at the bottom of your cast iron — those brown bits stuck to the pan are called fond. This is concentrated flavor. The entire pan sauce is built on releasing it. Do not wipe the pan.",
+      "BUILD THE SAUCE BASE (2 min): Reduce heat to medium. Add minced garlic directly to the hot fat in the pan. Stir 30–45 seconds until fragrant but not brown. You're blooming the garlic in the chicken drippings.",
+      "DEGLAZE (1 min): Pour in the chicken broth all at once. It will sizzle aggressively — that's correct. Use a wooden spoon or spatula to scrape every bit of fond from the bottom of the pan. Those bits dissolve into the broth and become your sauce. Add thyme sprigs now.",
+      "REDUCE (4–5 min): Let the sauce simmer uncovered over medium heat until it reduces by about half and coats the back of a spoon. You're concentrating flavor and building body. This should take about 4–5 minutes — resist the urge to rush it.",
+      "FINISH WITH FAT (1 min): Remove the pan from heat. Add Earth Balance or Miyoko's and swirl the pan continuously until it melts in and emulsifies into the sauce. This step adds gloss, richness, and body. Adding it off-heat prevents it from breaking. Squeeze in lemon juice, taste, adjust salt.",
+      "SERVE: Slice chicken, plate it, spoon sauce directly over the top. Garnish with chopped parsley. Seraphina can have her sauce on the side if preferred."
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Garlic Herb Chicken Thighs with Broccoli over Jasmine Rice",
+    "description": "A fast weeknight dinner built around boneless skinless chicken thighs seared in the cast iron for crispy edges, finished with a simple garlic-herb pan sauce, served over jasmine rice with steamed broccoli. Dairy-free as written — Suzie-safe. Use probe thermometer to hit 165°F internal for the chicken.",
+    "tags": ["cast iron", "chicken", "dairy-free", "higher protein", "quick", "weeknight"],
+    "items": [
+      {"name": "Chicken broth", "description": ""},
+      {"name": "Garlic", "description": ""},
+      {"name": "Jasmine rice", "description": ""},
+      {"name": "Lemon", "description": ""},
+      {"name": "Olive oil", "description": ""},
+      {"name": "black pepper", "description": ""},
+      {"name": "boneless skinless chicken thighs", "description": ""},
+      {"name": "broccoli florets", "description": ""},
+      {"name": "fresh or dried rosemary", "description": ""},
+      {"name": "fresh or dried thyme", "description": ""},
+      {"name": "garlic powder", "description": ""},
+      {"name": "kosher salt", "description": ""}
+    ],
+    "steps": [
+      "Start jasmine rice per package instructions (or use rice cooker).",
+      "Pat chicken thighs dry and season both sides with salt, pepper, and garlic powder.",
+      "Heat cast iron over medium-high until shimmering. Add olive oil.",
+      "Sear chicken thighs smooth-side down for 5–6 minutes without moving. Flip and cook another 4–5 minutes. Check internal temp — pull at 165°F.",
+      "Remove chicken and rest. Pour off excess fat, leaving about 1 tbsp in the pan.",
+      "Add minced garlic (3–4 cloves) and cook 30 seconds until fragrant.",
+      "Deglaze with 1/2 cup chicken broth, scraping up fond. Add thyme and rosemary. Simmer 2–3 minutes until slightly reduced.",
+      "While sauce reduces, steam or microwave broccoli florets until tender-crisp, about 3–4 minutes.",
+      "Squeeze half a lemon into the pan sauce. Taste and adjust salt.",
+      "Plate: jasmine rice base, chicken thighs on top, broccoli alongside, spoon pan sauce over everything."
+    ]
+  },
+  {
+    "id": 8,
+    "name": "White Bean & Chicken Thigh Skillet",
+    "description": "A hearty one-pan weeknight skillet that doubles the protein by combining chicken thighs with white beans. The beans soak up all the chicken fond and broth into something almost stew-like. Dairy-free as written — Suzie-safe. Great over rice or eaten straight from the pan. Leftovers reheat well the next day. Use the probe thermometer — pull chicken at 165°F.",
+    "tags": ["cast iron", "chicken", "dairy-free", "higher protein", "quick", "weeknight"],
+    "items": [
+      {"name": "Chicken broth", "description": ""},
+      {"name": "Garlic", "description": ""},
+      {"name": "Lemon", "description": ""},
+      {"name": "Olive oil", "description": ""},
+      {"name": "Onion powder", "description": ""},
+      {"name": "Paprika", "description": ""},
+      {"name": "black pepper", "description": ""},
+      {"name": "boneless skinless chicken thighs", "description": ""},
+      {"name": "canned white beans (cannellini or great northern)", "description": ""},
+      {"name": "dried oregano", "description": ""},
+      {"name": "fresh parsley (optional)", "description": ""},
+      {"name": "kosher salt", "description": ""}
+    ],
+    "steps": [
+      "Pat chicken thighs dry. Season both sides with salt, pepper, paprika, and onion powder.",
+      "Heat olive oil in a large skillet (or cast iron) over medium-high. Sear chicken thighs smooth-side down 5–6 minutes until golden. Flip and cook 4–5 more minutes. Pull at 165°F internal temp. Remove and set aside.",
+      "Reduce heat to medium. Add 3–4 minced garlic cloves to the same pan. Cook 30 seconds, stirring constantly.",
+      "Drain and rinse one can of white beans. Add to pan along with 3/4 cup chicken broth and dried oregano.",
+      "Stir, scraping up any fond from the bottom. Simmer 5–6 minutes until broth reduces slightly and beans are heated through.",
+      "Nestle chicken back into the pan. Squeeze lemon juice over everything.",
+      "Taste and adjust salt. Garnish with chopped parsley if available.",
+      "Serve directly from the pan. Works great over white rice or with crusty bread."
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Lazy Chicken & Broccoli Puff Pastry Pot Pie",
+    "description": "A lazy but deeply satisfying pot pie using frozen puff pastry as the top crust — no bottom crust, no rolling, no fuss. Air fryer version: portion into individual ramekins or small oven-safe dishes that fit your air fryer basket. The filling is chicken thighs, broccoli, and white beans in a savory thickened broth. No oven needed — great for hot Georgia summers.",
+    "tags": ["chicken", "higher protein", "technique", "weeknight"],
+    "items": [
+      {"name": "Chicken broth", "description": ""},
+      {"name": "Garlic", "description": ""},
+      {"name": "Olive oil", "description": ""},
+      {"name": "Onion powder", "description": ""},
+      {"name": "black pepper", "description": ""},
+      {"name": "boneless skinless chicken thighs", "description": ""},
+      {"name": "broccoli florets", "description": ""},
+      {"name": "canned white beans", "description": ""},
+      {"name": "dried thyme", "description": ""},
+      {"name": "egg (for egg wash, optional)", "description": ""},
+      {"name": "flour (2 tbsp for thickening)", "description": ""},
+      {"name": "frozen puff pastry (1 sheet)", "description": ""},
+      {"name": "kosher salt", "description": ""},
+      {"name": "oat milk or coconut cream (dairy-free swap for heavy cream)", "description": ""}
+    ],
+    "steps": [
+      "Thaw one sheet of puff pastry per package directions — 30–40 minutes at room temp, or overnight in the fridge.",
+      "Cut chicken thighs into 1-inch chunks. Season with salt, pepper, and onion powder.",
+      "Heat olive oil in a skillet or cast iron over medium-high. Sear chicken pieces 3–4 minutes until lightly browned. They don't need to be fully cooked yet. Remove and set aside.",
+      "Reduce heat to medium. Add 2–3 minced garlic cloves, cook 30 seconds.",
+      "Sprinkle 2 tbsp flour over the pan drippings and stir into a quick roux. Cook 1 minute.",
+      "Slowly whisk in 1.5 cups chicken broth and 1/2 cup milk (or cream). Stir until smooth and thickening, 3–4 minutes.",
+      "Add drained white beans, broccoli florets, dried thyme, and seared chicken back to the pan. Stir to combine. Taste and adjust salt. Remove from heat and let cool slightly — 5 minutes.",
+      "Preheat air fryer to 375°F for 3 minutes.",
+      "Divide filling into individual ramekins or small oven-safe dishes that fit your air fryer basket. Don't overfill — leave about 1/2 inch of headroom.",
+      "Cut puff pastry into rounds or squares slightly larger than each ramekin. Drape over the top and press edges down lightly. Cut one small slit in the center of each for steam. Brush with egg wash if using.",
+      "Air fry at 375°F for 12–15 minutes until pastry is deep golden brown and puffed. Check at 12 minutes — air fryers vary.",
+      "Let rest 5 minutes before eating. The filling will be extremely hot."
+    ]
+  },
+  {
+    "id": 10,
+    "name": "Spicy Ranch Chicken",
+    "description": "A simple ranch-marinated grilled chicken with a mayo-yogurt base. The lactic acid from the yogurt tenderizes the meat while the fatty mayo insulates it, making for a juicy result. Great with a green salad. Note for Team Castaldi: yogurt and mayo contain dairy — see substitution notes. Reduce or omit hot sauce for Seraphina; serve jalapeño on the side.",
+    "tags": ["chicken", "dairy-free adaptable", "grill", "higher protein", "technique", "weeknight"],
+    "items": [
+      {"name": "Chives", "description": ""},
+      {"name": "Lemon", "description": ""},
+      {"name": "Mayonnaise", "description": ""},
+      {"name": "Onion powder", "description": ""},
+      {"name": "Sugar", "description": ""},
+      {"name": "Vegetable oil", "description": ""},
+      {"name": "black pepper", "description": ""},
+      {"name": "boneless skinless chicken breasts", "description": ""},
+      {"name": "dried dill", "description": ""},
+      {"name": "garlic powder", "description": ""},
+      {"name": "hot sauce", "description": ""},
+      {"name": "jalapeño", "description": ""},
+      {"name": "kosher salt", "description": ""},
+      {"name": "plain whole-milk yogurt", "description": ""}
+    ],
+    "steps": [
+      "Whisk together lemon zest and juice, 1.5 cups yogurt, 0.5 cup mayonnaise, 2 tbsp dried dill, 2 tbsp garlic powder, 2 tbsp onion powder, 1 tbsp hot sauce, 2 tsp pepper, 2 tsp sugar, and 1 tsp kosher salt until smooth. Measure out 0.5 cup dressing and set aside for serving.",
+      "If using regular chicken breasts, butterfly each breast: place on a cutting board with a short side toward you, hold a chef's knife parallel to the breast, and slice along the middle of a long side to make 2 thin cutlets.",
+      "Add chicken to the remaining dressing, add 1.5 tsp kosher salt, and toss to coat evenly. Cover and marinate at least 30 minutes (refrigerate if longer than 30 minutes, up to 12 hours).",
+      "Prepare a grill for medium-high indirect heat (gas: set one or two burners to low and bank coals to one side on charcoal). Lightly oil the grate.",
+      "Remove chicken from marinade, letting excess drip off. Grill over direct heat until dark grill marks appear underneath, about 4 minutes. Flip and continue cooking, moving to indirect heat if browning too quickly, until cooked through, about 3 more minutes. Use a probe thermometer to confirm 165°F internal temp.",
+      "Transfer chicken to a cutting board. Season with more salt if needed. Slice each cutlet crosswise into 3–4 pieces.",
+      "Spoon reserved dressing onto a platter. Arrange chicken on top. Scatter chives and/or dill over the top. Serve with thinly sliced jalapeño on the side for those who want extra heat."
+    ]
+  },
+  {
+    "id": 11,
+    "name": "Grilled Salmon with Dill Chimichurri",
+    "description": "A vibrant dill chimichurri made with chile, garlic, and vinegar pulls double duty — first as a flavorful precursor to coat salmon fillets before they hit the grill, then spooned over them off heat. The shallot in the sauce will char and frizzle over the heat. The lemon-slice method keeps the skin off the grate entirely: quick sear skin-side up first, then flip fillets onto pairs of lemon slices, which act like a cedar plank for protection and flavor. By Jesse Szewczyk.",
+    "tags": ["chimichurri", "dairy-free", "grill", "higher protein", "salmon", "seafood", "technique", "weekend"],
+    "items": [
+      {"name": "Red wine vinegar", "description": ""},
+      {"name": "Shallot", "description": ""},
+      {"name": "Sugar", "description": ""},
+      {"name": "crushed red pepper flakes", "description": ""},
+      {"name": "extra-virgin olive oil", "description": ""},
+      {"name": "fresh dill and/or parsley", "description": ""},
+      {"name": "garlic cloves", "description": ""},
+      {"name": "kosher salt", "description": ""},
+      {"name": "lemons", "description": ""},
+      {"name": "serrano chile", "description": ""},
+      {"name": "skin-on salmon fillets", "description": ""},
+      {"name": "vegetable oil (for grill)", "description": ""}
+    ],
+    "steps": [
+      "Prepare a grill for medium-high heat; oil grate with vegetable oil.",
+      "Mix shallot (1, finely chopped), garlic (2 cloves, finely chopped), serrano chile (1, halved, seeds removed, finely chopped), dill and/or parsley (½ cup finely chopped), olive oil (¼ cup plus 2 Tbsp), red wine vinegar (¼ cup plus 1 Tbsp), sugar (1½ tsp), crushed red pepper flakes (¼ tsp), and kosher salt (½ tsp Diamond Crystal or ¼ tsp Morton) in a small bowl.",
+      "Cut 1½ lemons into 8 slices total; remove and discard seeds. Set slices aside. Squeeze juice from remaining ½ lemon into chimichurri and mix well.",
+      "Season salmon (4 skin-on, 6–8 oz fillets, pin bones removed, patted dry) with salt. Transfer 3 Tbsp chimichurri to a small bowl; set remaining chimichurri aside.",
+      "Coat fillets all over with the 3 Tbsp chimichurri, dividing evenly. Arrange skin side up on grate; grill just until char marks appear and fillets release easily, about 30 seconds. Transfer to a baking sheet, skin side down.",
+      "Place reserved lemon slices in pairs on grate, snuggling up against each other. Place each salmon fillet skin side down on a pair of lemon slices (fillets should not touch the grate). Cover and grill until cooked through and flesh flakes easily with a fork, 13–18 minutes.",
+      "Transfer salmon to a platter and tuck lemon slices around if desired. Spoon some reserved chimichurri over. Serve remaining chimichurri on the side."
+    ]
+  },
+  {
+    "id": 12,
+    "name": "Chimichurri — Sauce Curriculum",
+    "description": "Chimichurri is an Argentinian herb sauce built entirely on the knife and a bowl — no heat, no emulsification science, no special equipment. That simplicity is the lesson: great sauces don't always require cooking. What they require is understanding the role of each component and building them in the right order. This version is classic (parsley-forward, red wine vinegar, garlic, red pepper flakes) with a dill variation note at the end. Makes ~¾ cup, enough for 4 servings as a finishing sauce or marinade.",
+    "tags": ["chimichurri", "dairy-free", "herb sauce", "no-cook", "sauce curriculum", "technique"],
+    "items": [
+      {"name": "Red wine vinegar", "description": ""},
+      {"name": "Shallot", "description": ""},
+      {"name": "black pepper", "description": ""},
+      {"name": "crushed red pepper flakes", "description": ""},
+      {"name": "extra-virgin olive oil", "description": ""},
+      {"name": "flat-leaf parsley", "description": ""},
+      {"name": "fresh oregano (optional)", "description": ""},
+      {"name": "garlic cloves", "description": ""},
+      {"name": "kosher salt", "description": ""},
+      {"name": "lemon (optional, for variation)", "description": ""}
+    ],
+    "steps": [
+      "PREP YOUR HERBS (5 min): Strip parsley leaves from stems — stems are fine in stock but too fibrous here. You want ½ cup packed flat-leaf parsley leaves, measured after picking. If using fresh oregano, pick 1 tbsp of leaves. Dry the herbs thoroughly with a paper towel if they're wet — water dilutes the sauce and shortens its life.",
+      "CHOP, DON'T PROCESS (5 min): Chop the parsley (and oregano if using) by hand with a sharp knife until fine but not paste-like. You're aiming for roughly 1–2mm pieces — small enough that no individual piece dominates a bite, large enough to have texture. A food processor turns this into green slurry. Knife work is the technique.",
+      "PREPARE THE AROMATICS: Mince 3–4 garlic cloves as fine as you can — any large chunks will be sharp and raw in the finished sauce. Mince ½ shallot (about 2 tbsp) to the same fineness. The shallot is optional but adds a mild sweetness that rounds out raw garlic's edge.",
+      "BUILD IN THE BOWL — ACID FIRST: Combine the minced garlic and shallot in a small bowl. Add ¼ cup red wine vinegar. Let this sit for 2 minutes. WHY: The acid begins to macerate the aromatics, softening their raw bite before you add the herbs. This prevents the garlic from overwhelming the sauce.",
+      "ADD HERBS AND SEASONING: Add the chopped parsley (and oregano) to the bowl. Add ¼ tsp crushed red pepper flakes (or more to taste — start conservative, you can always add). Add ½ tsp kosher salt and a few grinds of black pepper.",
+      "STREAM IN THE OIL: Add ½ cup extra-virgin olive oil. Stir to combine — don't whisk vigorously. Chimichurri should be a loose, spoonable sauce, not emulsified. The oil and vinegar will separate slightly on standing; that's correct. Stir before serving.",
+      "TASTE AND BALANCE — THIS IS THE SKILL: Taste on a piece of bread or a spoon. Ask four questions: (1) Sharp/acidic? Add a pinch of sugar or a little more oil. (2) Flat? Add more vinegar or a squeeze of lemon. (3) Bland? Add salt ¼ tsp at a time. (4) Too mild? Add red pepper flakes or a small amount of fresh chile. Adjust one variable at a time.",
+      "REST BEFORE SERVING (minimum 30 min, ideally 2 hours): Cover and leave at room temperature. The acid will mellow the garlic, the oil will carry the herb flavor throughout, and the sauce will integrate into something cohesive. Do not skip this step. Chimichurri served immediately tastes unfinished.",
+      "SERVE AND STORE: Spoon over grilled meats, fish, roasted vegetables, or eggs. Also works as a marinade — coat protein 30 min to 2 hours before cooking. Keeps refrigerated up to 5 days; the flavor deepens over time. Bring to room temperature and stir before using — cold olive oil seizes up.",
+      "DILL VARIATION (from the Grilled Salmon recipe): Swap half the parsley for finely chopped fresh dill. Reduce oregano or omit. Add ½ tsp sugar to balance dill's slight bitterness. This variation is brighter and more delicate — excellent with fish, not traditional but very good."
+    ]
+  },
+  {
+    "id": 13,
+    "name": "Canned Tuna Tostadas",
+    "description": "Inspired by the iconic tuna tostada at Contramar in Mexico City. A laid-back weeknight version using oil-packed canned tuna with chipotle mayo, avocado, and mango.",
+    "tags": ["dairy-free", "no-cook", "quick", "seafood", "weeknight"],
+    "items": [
+      {"name": "Avocado", "description": ""},
+      {"name": "Lime", "description": ""},
+      {"name": "Mango", "description": ""},
+      {"name": "Mayonnaise", "description": ""},
+      {"name": "Shallot", "description": ""},
+      {"name": "canned chipotle chiles in adobo", "description": ""},
+      {"name": "kosher salt", "description": ""},
+      {"name": "oil-packed canned tuna", "description": ""},
+      {"name": "tostadas", "description": ""}
+    ],
+    "steps": [
+      "Finely chop 1 shallot and combine with juice of 1 lime and a pinch of kosher salt in a bowl. Let sit.",
+      "In a separate bowl, mix 1/4 cup mayonnaise with 1 Tbsp finely chopped canned chipotle chiles and a pinch of salt.",
+      "Add tuna and oil from one 7-oz or two 5-oz cans of oil-packed tuna to the shallot bowl. Mix lightly to combine, keeping chunks intact. Taste and season with more salt if needed.",
+      "Spread chipotle mayo over 4 tostadas.",
+      "Arrange 1 thinly sliced avocado and 1/2 thinly sliced mango over the chipotle mayo.",
+      "Spoon tuna mixture with dressing over the top. Serve with lime wedges."
+    ]
+  },
+  {
+    "id": 14,
+    "name": "Orecchiette with Fresh Corn Alfredo",
+    "description": "A quick, bright summer pasta that lets fresh corn shine. Corn kernels and their natural starches and juices form the base of a salty, cheesy no-cook sauce — finished with basil, garlic, lime, and Parmesan. Peak corn season dish. Contains dairy (butter + Parmesan).",
+    "tags": ["corn", "dairy", "pasta", "quick", "summer", "technique", "weeknight"],
+    "items": [
+      {"name": "Lime", "description": "1"},
+      {"name": "Parmesan", "description": "4 oz (about 2 cups grated)"},
+      {"name": "dried orecchiette", "description": "12 oz"},
+      {"name": "fresh basil", "description": "1 cup, packed, chopped (plus extra for garnish)"},
+      {"name": "fresh corn on the cob", "description": "4-6 ears"},
+      {"name": "fresno chile", "description": "1 small"},
+      {"name": "garlic cloves", "description": "3"},
+      {"name": "kosher salt", "description": "to taste"},
+      {"name": "unsalted butter", "description": "1/2 cup (1 stick)"}
+    ],
+    "steps": [
+      "Cook 12 oz dried orecchiette in a large pot of generously salted boiling water, stirring occasionally, until al dente. Drain, reserving 2 cups pasta cooking liquid. Shake pasta to remove excess water and return to pot (leave off heat).",
+      "Meanwhile, working one cob at a time, cut kernels off corncobs and transfer to a large bowl. Stand each cob upright in the center of the bowl and, using the back of a chef's knife, scrape down the sides to release juices and starches into the bowl. Discard cobs.",
+      "Mix into the corn bowl: 1 small Fresno chile (seeds removed, thinly sliced), 3 finely grated garlic cloves, 1/2 cup (1 stick) unsalted butter cut into 1/2-inch pieces, and 1 cup lightly packed coarsely chopped fresh basil.",
+      "Add corn mixture to the pasta in the pot. Toss to combine. Gradually add 4 oz finely grated Parmesan (about 2 cups), stirring constantly and adding pasta cooking liquid a little at a time as needed, until a thick, glossy sauce forms. Stir in juice of 1 lime. Taste and season with salt if needed.",
+      "Divide pasta among shallow bowls. Top with fresh basil leaves if desired."
+    ]
+  },
+  {
+    "id": 15,
+    "name": "Grilled Lemongrass Chicken Thighs",
+    "description": "A pared-back Vietnamese-style lemongrass chicken where a blended nuoc cham does double duty as both a flavorful marinade and a final dressing. Dairy-free. No grill? Cook under the broiler until charred in spots instead.",
+    "tags": ["chicken", "dairy-free", "grill", "higher protein", "quick", "vietnamese", "weeknight"],
+    "items": [
+      {"name": "Rice noodles", "description": ""},
+      {"name": "Sugar", "description": ""},
+      {"name": "Vegetable oil", "description": ""},
+      {"name": "distilled white vinegar", "description": ""},
+      {"name": "fish sauce", "description": ""},
+      {"name": "fresh cilantro", "description": ""},
+      {"name": "garlic cloves", "description": ""},
+      {"name": "kosher salt", "description": ""},
+      {"name": "lemongrass stalks", "description": ""},
+      {"name": "limes", "description": ""},
+      {"name": "mini seedless cucumber", "description": ""},
+      {"name": "serrano chiles", "description": ""},
+      {"name": "skinless boneless chicken thighs", "description": ""}
+    ],
+    "steps": [
+      "Blend 4 lemongrass stalks (bottom third only, tough outer layers removed, cut into 1-inch pieces), 4 garlic cloves, 2/3 cup distilled white vinegar, 1/3 cup fish sauce, and 1–2 serrano chiles in a blender until a fine purée forms, about 1 minute.",
+      "Strain lemongrass purée through a fine-mesh sieve into a large bowl. Transfer 1/4 cup to a small bowl and set aside — this will be the base for the dressing.",
+      "Add 2 lb. skinless boneless chicken thighs and 1 Tbsp. Diamond Crystal kosher salt (or 1 3/4 tsp. Morton) to the large bowl. Massage until salt is dissolved. Cover and let chicken sit at least 20 minutes and up to 12 hours (chill if marinating longer than 30 minutes; no need to bring to room temperature before grilling).",
+      "Prepare a grill for high indirect heat (for charcoal, bank coals on one side; for gas, leave one or two burners off). Oil grate. Remove chicken from marinade and grill over direct heat, moving to indirect heat as needed if browning too quickly. Turn halfway through, until grill marks appear and chicken is browned on both sides and cooked through, 8–12 minutes. Transfer to a wire rack set inside a rimmed baking sheet and let sit 10 minutes.",
+      "Broiler alternative: Broil marinated chicken on a rack set over a sheet pan, 6 inches from heat, until charred in spots and cooked through, about 12–15 minutes, flipping once halfway.",
+      "Arrange chicken thighs on a platter. Whisk zest and juice of 2 large limes and 1 Tbsp. plus 1 tsp. sugar (or more) into the reserved lemongrass purée. Taste dressing and add more sugar if needed.",
+      "Pour dressing over chicken. Scatter 1 mini seedless cucumber (cut into matchsticks) and 1/2 bunch cilantro (tough stems removed, coarsely chopped) on top. Serve with rice noodles, steamed rice, or grilled bread if desired."
+    ]
+  },
+  {
+    "id": 16,
+    "name": "Cold Sesame Rice Noodles",
+    "description": "A bright, punchy cold noodle dish built around a sesame-soy-ginger dressing. Designed to pair with Grilled Lemongrass Chicken Thighs (Recipe 15) for a no-fuss summer lunch — everything made ahead, served at room temp or cold. Scales easily. Nut-free as written. Dairy-free.",
+    "tags": ["cold", "dairy-free", "no-cook", "noodles", "nut-free", "quick", "sesame", "summer", "vietnamese", "weeknight"],
+    "items": [
+      {"name": "Rice vinegar", "description": ""},
+      {"name": "Soy sauce", "description": ""},
+      {"name": "chili garlic sauce or sambal oelek", "description": ""},
+      {"name": "fresh cilantro", "description": ""},
+      {"name": "fresh ginger", "description": ""},
+      {"name": "garlic cloves", "description": ""},
+      {"name": "honey or sugar", "description": ""},
+      {"name": "limes", "description": ""},
+      {"name": "mini seedless cucumbers", "description": ""},
+      {"name": "rice noodles (12 oz)", "description": ""},
+      {"name": "scallions", "description": ""},
+      {"name": "toasted sesame oil", "description": ""}
+    ],
+    "steps": [
+      "DRESSING (make this first — it gets better as it sits): Whisk together: 3 tbsp toasted sesame oil, 3 tbsp soy sauce, 2 tbsp rice vinegar, 1 tbsp fresh ginger (finely grated), 2 cloves garlic (finely grated), 1 tbsp honey or sugar, 1–2 tsp chili garlic sauce or sambal oelek (omit for no heat), juice of 1 lime. Taste — it should be salty, tangy, slightly sweet, and sesame-forward. Adjust any direction. Set aside.",
+      "NOODLES: Cook 12 oz rice noodles per package directions. Drain and rinse immediately under cold running water until completely cool — this stops cooking and keeps them from sticking. Shake well to remove excess water.",
+      "Toss noodles with about 2/3 of the dressing while still slightly damp. They'll absorb it as they sit. Reserve remaining dressing for drizzling at the table.",
+      "TOPPINGS (prep and refrigerate separately, assemble at serving): Thinly slice 2 mini seedless cucumbers into matchsticks or half-moons.",
+      "Thinly slice 4–5 scallions on the bias.",
+      "Pick and roughly chop a generous handful of fresh cilantro.",
+      "Halve 2 limes for serving.",
+      "SERVE: Pile noodles on a large platter or serve family-style in the bowl. Arrange cucumber, scallions, and cilantro on top. Drizzle remaining dressing over. Set lime halves alongside.",
+      "If pairing with Grilled Lemongrass Chicken Thighs: slice chicken and lay over the noodles, or serve on a separate plate and let people build their own bowl."
+    ]
+  },
+  {
+    "id": 17,
+    "name": "Skillet Street Corn",
+    "description": "Stovetop take on Mexican street corn (elote), built for canned corn — one pan, ~15 minutes, no oven needed. Contains dairy (mayo, sour cream, cheese). For Seraphina: hold the chili powder on her portion or serve it on the side; rest of the recipe is mild as written.",
+    "tags": ["corn", "dairy", "quick", "side", "stovetop", "weeknight"],
+    "items": [
+      {"name": "Butter", "description": ""},
+      {"name": "Chili powder", "description": ""},
+      {"name": "Cilantro", "description": ""},
+      {"name": "Lime", "description": ""},
+      {"name": "Sour cream", "description": ""},
+      {"name": "canned corn", "description": ""},
+      {"name": "cotija cheese", "description": ""},
+      {"name": "kosher salt", "description": ""},
+      {"name": "mayo", "description": ""}
+    ],
+    "steps": [
+      "Melt 1.5 tbsp butter or oil in a large skillet over medium-high heat. Add 2 cans (15.25 oz each) drained corn in as close to a single layer as the pan allows.",
+      "Let it sit undisturbed for 2-3 minutes to pick up char on the bottom, then stir and repeat until you've got good color throughout — about 8-10 minutes total.",
+      "Take off heat. While still hot, stir in 3 tbsp mayo and 1.5 tbsp sour cream (optional — extra mayo works fine if skipping) so it melts into the corn evenly.",
+      "Fold in half of 1/3 cup crumbled cotija or feta and half of 3 tbsp chopped cilantro.",
+      "Plate, top with remaining cheese and cilantro, a squeeze of lime juice (1 lime), and 1.5 tsp chili powder or Tajín. Salt to taste."
+    ]
+  },
+  {
+    "id": 18,
+    "name": "Italian-American Meatballs (Chuck & Sausage)",
+    "description": "Classic Italian-American meatballs using ground chuck and mild Italian sausage, bound with a panko panade for tenderness. Air fryer method with probe thermometer doneness check. Yields ~16-18 meatballs (2 oz each).",
+    "tags": ["higher protein", "weeknight"],
+    "items": [
+      {"name": "Italian cheese blend", "description": "4 oz"},
+      {"name": "Italian seasoning", "description": "1.5 to 2 tbsp"},
+      {"name": "ground chuck (80/20)", "description": "1 lb"},
+      {"name": "kosher salt", "description": "1.5 tsp"},
+      {"name": "large eggs", "description": "2"},
+      {"name": "mild Italian sausage", "description": "1 lb"},
+      {"name": "milk or broth, for panade", "description": "1/4 cup"},
+      {"name": "minced garlic", "description": "1 to 1.5 tsp"},
+      {"name": "panko breadcrumbs", "description": "3/4 to 1 cup"},
+      {"name": "tomato paste", "description": "1 tbsp"}
+    ],
+    "steps": [
+      "Hydrate the panko in milk or broth for 5 minutes to form a panade.",
+      "Whisk together the eggs, minced garlic, tomato paste, Italian seasoning, and kosher salt in a large bowl.",
+      "Fold the hydrated panade into the egg mixture.",
+      "Fold in the Italian cheese blend.",
+      "Add the ground chuck and sausage to the bowl.",
+      "Combine the mixture gently by hand until just held together; do not overmix.",
+      "Portion the mixture into 1.5 to 2 inch balls, about 2 oz each.",
+      "Arrange meatballs in the air fryer basket in a single layer, working in batches if needed.",
+      "Air fry at 380F for 10 to 12 minutes, shaking or flipping halfway through.",
+      "Check internal temperature with the probe thermometer; pull at 165F."
+    ]
+  },
+  {
+    "id": 19,
+    "name": "Overnight Oats",
+    "description": "A simple make-ahead breakfast base that you customize with mix-ins. Prep the night before and grab it on your way out the door.\n\n## Mix-In Variations\n- **Classic:** cinnamon + maple syrup + sliced banana\n- **Berry:** mixed berries + a spoonful of chia seeds + almond butter\n- **Chocolate PB:** cocoa powder + peanut butter + banana\n- **Tropical:** shredded coconut + diced mango + pineapple\n- **Apple Pie:** grated apple + cinnamon + walnuts + raisins\n- **Nutty:** toasted almonds, pecans, or walnuts + a drizzle of honey",
+    "tags": ["breakfast", "make-ahead", "no-cook"],
+    "items": [
+      {"name": "Chia seeds", "description": ""},
+      {"name": "Salt", "description": ""},
+      {"name": "Vanilla extract", "description": ""},
+      {"name": "Yogurt", "description": ""},
+      {"name": "honey or maple syrup", "description": ""},
+      {"name": "milk (or plant milk)", "description": ""},
+      {"name": "mix-ins of choice (fruit, nut butter, spices, nuts)", "description": ""},
+      {"name": "rolled oats", "description": ""}
+    ],
+    "steps": [
+      "In a jar or container, combine 1/2 cup rolled oats, 1/2 cup milk, 1/4 cup yogurt, 1 tsp chia seeds, a pinch of salt, and sweetener/vanilla to taste.",
+      "Stir well to combine.",
+      "Add your chosen mix-ins (see variations) and stir again, or reserve some to top just before eating.",
+      "Cover and refrigerate overnight (at least 4-6 hours).",
+      "In the morning, stir, adjust consistency with a splash more milk if too thick, add fresh toppings, and enjoy cold or warmed."
+    ]
+  },
+  {
+    "id": 20,
+    "name": "Spice-Rubbed Chicken Thighs",
+    "description": "A versatile, big-batch spice-rubbed chicken thigh recipe for a weekend cook. Default method is oven-roasting (great indoor option for rainy days); a grilling variation is included for nice weather. Yields enough for dinner for 3 plus leftovers for lunches.\n\n## Notes\n- Spice rub is flexible — swap in whatever's strong in your cabinet (smoked paprika, cumin, coriander, chili powder, oregano all work well).\n- Bone-in, skin-on thighs stay juiciest, but boneless works too (reduce cook time by ~5-8 min).\n- Leftovers keep well 3-4 days; great sliced over rice, salad, or in wraps.",
+    "tags": ["chicken", "weekend"],
+    "items": [
+      {"name": "Cayenne pepper", "description": ""},
+      {"name": "Chicken thighs", "description": ""},
+      {"name": "Lemon", "description": ""},
+      {"name": "Olive oil", "description": ""},
+      {"name": "Onion powder", "description": ""},
+      {"name": "Salt", "description": ""},
+      {"name": "Smoked paprika", "description": ""},
+      {"name": "black pepper", "description": ""},
+      {"name": "dried oregano", "description": ""},
+      {"name": "garlic powder", "description": ""},
+      {"name": "ground cumin", "description": ""}
+    ],
+    "steps": [
+      "Pat 8-10 chicken thighs dry with paper towels and place in a large bowl.",
+      "In a small bowl, mix 2 tbsp olive oil with 2 tsp smoked paprika, 1.5 tsp ground cumin, 1.5 tsp garlic powder, 1 tsp onion powder, 1 tsp dried oregano, 1.5 tsp salt, 1/2 tsp black pepper, and 1/4 tsp cayenne (adjust heat to taste).",
+      "Rub the spice mixture all over the chicken thighs, coating evenly, including under the skin if bone-in. Let sit at room temperature 20-30 minutes (or refrigerate up to overnight for deeper flavor).",
+      "INDOOR/OVEN METHOD: Preheat oven to 425°F (220°C). Arrange thighs skin-side up on a rimmed baking sheet or in a large oven-safe skillet, leaving space between pieces.",
+      "Roast for 35-40 minutes, until skin is crisp and golden and internal temperature reaches 165°F (74°C). If using boneless thighs, check at 25-30 minutes.",
+      "OUTDOOR/GRILL METHOD (weather permitting): Preheat grill to medium-high. Grill thighs skin-side down first for 6-8 minutes, flip, and continue grilling 6-10 minutes more until internal temp hits 165°F (74°C).",
+      "Let chicken rest 5 minutes. Squeeze fresh lemon juice over the top before serving.",
+      "Portion out lunch-sized servings once cooled, and refrigerate in airtight containers for up to 4 days."
+    ]
+  },
+  {
+    "id": 21,
+    "name": "Chinese Mince",
+    "description": "A family recreation of a savory wok-fried ground beef and green onion dish, passed down from memory rather than a written recipe. Leans savory/umami rather than sweet or salty — the soy and oyster sauce should taste deep and rounded, not sharp. Traditionally served over steamed white rice; a noodle variation is included below for a change of pace.\n\nNOODLE VARIATION: Skip the rice. Toss the finished mince and sauce directly with 8 oz cooked and drained lo mein or thin egg noodles right in the wok for 30-60 seconds so the noodles soak up the sauce. Add a splash more soy sauce or a little noodle water if it looks dry.",
+    "tags": ["beef", "family recipe", "weeknight", "wok"],
+    "items": [
+      {"name": "Shaoxing wine or dry sherry (optional), 1 tbsp", "description": ""},
+      {"name": "bamboo shoots (optional)", "description": ""},
+      {"name": "bean sprouts (optional)", "description": ""},
+      {"name": "bell pepper, diced (optional)", "description": ""},
+      {"name": "carrots, diced or julienned (optional)", "description": ""},
+      {"name": "celery, diced (optional)", "description": ""},
+      {"name": "cooked lo mein or thin egg noodles, 8 oz (optional, for noodle variation)", "description": ""},
+      {"name": "cornstarch, 1 tsp, mixed with 2 tbsp water", "description": ""},
+      {"name": "dark soy sauce or hoisin sauce (optional, for extra savory depth), 1 tsp", "description": ""},
+      {"name": "fresh ginger, 1 tbsp, minced", "description": ""},
+      {"name": "frozen peas (optional), 1/2 cup", "description": ""},
+      {"name": "garlic, 2 to 3 cloves, minced", "description": ""},
+      {"name": "green onions (scallions), 4 to 6, sliced, white and green parts separated", "description": ""},
+      {"name": "ground beef, 1 lb", "description": ""},
+      {"name": "mushrooms, sliced (optional)", "description": ""},
+      {"name": "neutral oil (vegetable or peanut), 2 tbsp", "description": ""},
+      {"name": "oyster sauce, 1 to 2 tbsp", "description": ""},
+      {"name": "snow peas (optional)", "description": ""},
+      {"name": "soy sauce, 3 tbsp", "description": ""},
+      {"name": "steamed white rice, for serving", "description": ""},
+      {"name": "sugar, 1/2 tsp", "description": ""},
+      {"name": "water chestnuts, diced (optional), 1/2 cup", "description": ""},
+      {"name": "white pepper or black pepper, to taste", "description": ""}
+    ],
+    "steps": [
+      "Heat the wok over high heat until just smoking. Add oil and swirl to coat.",
+      "Add the white parts of the green onions, garlic, and ginger; stir-fry 15-20 seconds until fragrant.",
+      "Add the ground beef, breaking it up with a spatula. Stir-fry until browned and mostly cooked through, 3-4 minutes.",
+      "If using any harder optional vegetables (carrots, celery, bell pepper, mushrooms), add them now and stir-fry 1-2 minutes until just tender.",
+      "Add soy sauce, oyster sauce, dark soy sauce or hoisin (if using), and sugar. Stir to coat the meat evenly. Add Shaoxing wine if using.",
+      "Stir in peas, water chestnuts, bamboo shoots, bean sprouts, or snow peas now if using - these need less cooking time.",
+      "Pour in the cornstarch slurry and toss until the sauce thickens slightly and clings to the meat and vegetables, about 30 seconds.",
+      "Stir in the green parts of the scallions, toss briefly to wilt, then remove from heat.",
+      "Season with white pepper to taste.",
+      "Serve hot over steamed white rice. For the noodle variation, see description."
+    ]
+  },
+  {
+    "id": 22,
+    "name": "Chinese Mince (Skillet Method)",
+    "description": "A no-wok variant of the \"Chinese Mince\" family recreation — same savory-forward ground beef and green onion dish, adapted for a large skillet or sauté pan instead of a wok. Leans savory/umami rather than sweet or salty. Traditionally served over steamed white rice; see the noodle variation note below.\n\nUse a 12-inch or larger heavy-bottomed skillet (cast iron or stainless both work). The key is high heat and not overcrowding the pan so the beef sears rather than steams - work in batches if your skillet is on the smaller side.\n\nNOODLE VARIATION: Skip the rice. Toss the finished mince and sauce directly with 8 oz cooked and drained lo mein or thin egg noodles right in the skillet for 30-60 seconds so the noodles soak up the sauce. Add a splash more soy sauce or a little noodle water if it looks dry.",
+    "tags": ["beef", "family recipe", "skillet", "weeknight"],
+    "items": [
+      {"name": "Shaoxing wine or dry sherry (optional), 1 tbsp", "description": ""},
+      {"name": "bamboo shoots (optional)", "description": ""},
+      {"name": "bean sprouts (optional)", "description": ""},
+      {"name": "bell pepper, diced (optional)", "description": ""},
+      {"name": "carrots, diced or julienned (optional)", "description": ""},
+      {"name": "celery, diced (optional)", "description": ""},
+      {"name": "cooked lo mein or thin egg noodles, 8 oz (optional, for noodle variation)", "description": ""},
+      {"name": "cornstarch, 1 tsp, mixed with 2 tbsp water", "description": ""},
+      {"name": "dark soy sauce or hoisin sauce (optional, for extra savory depth), 1 tsp", "description": ""},
+      {"name": "fresh ginger, 1 tbsp, minced", "description": ""},
+      {"name": "frozen peas (optional), 1/2 cup", "description": ""},
+      {"name": "garlic, 2 to 3 cloves, minced", "description": ""},
+      {"name": "green onions (scallions), 4 to 6, sliced, white and green parts separated", "description": ""},
+      {"name": "ground beef, 1 lb", "description": ""},
+      {"name": "mushrooms, sliced (optional)", "description": ""},
+      {"name": "neutral oil (vegetable or peanut), 2 tbsp", "description": ""},
+      {"name": "oyster sauce, 1 to 2 tbsp", "description": ""},
+      {"name": "snow peas (optional)", "description": ""},
+      {"name": "soy sauce, 3 tbsp", "description": ""},
+      {"name": "steamed white rice, for serving", "description": ""},
+      {"name": "sugar, 1/2 tsp", "description": ""},
+      {"name": "water chestnuts, diced (optional), 1/2 cup", "description": ""},
+      {"name": "white pepper or black pepper, to taste", "description": ""}
+    ],
+    "steps": [
+      "Heat a large (12-inch or bigger) heavy-bottomed skillet over medium-high to high heat until very hot. Add oil and swirl to coat.",
+      "Add the white parts of the green onions, garlic, and ginger; stir-fry 15-20 seconds until fragrant, keeping them moving so they don't scorch on the flatter surface.",
+      "Add the ground beef, breaking it up with a spatula and spreading it out so it contacts the pan surface. Let it sear undisturbed for a bit before stirring, then stir-fry until browned and mostly cooked through, 3-5 minutes. If the pan is crowded, cook the beef in two batches so it sears instead of steams.",
+      "If using any harder optional vegetables (carrots, celery, bell pepper, mushrooms), add them now and stir-fry 1-2 minutes until just tender, tossing frequently.",
+      "Add soy sauce, oyster sauce, dark soy sauce or hoisin (if using), and sugar. Stir to coat the meat evenly. Add Shaoxing wine if using.",
+      "Stir in peas, water chestnuts, bamboo shoots, bean sprouts, or snow peas now if using - these need less cooking time.",
+      "Pour in the cornstarch slurry and toss until the sauce thickens slightly and clings to the meat and vegetables, about 30 seconds.",
+      "Stir in the green parts of the scallions, toss briefly to wilt, then remove from heat.",
+      "Season with white pepper to taste.",
+      "Serve hot over steamed white rice. For the noodle variation, see description."
+    ]
+  },
+  {
+    "id": 23,
+    "name": "Katsu Chicken Curry",
+    "description": "Japanese-style katsu chicken curry: crispy panko-breaded chicken breast served with a smooth, mildly sweet curry sauce over white rice. Prep: 15 min, Cook: 30 min, Ready in: 45 min.",
+    "tags": ["chicken", "curry", "japanese"],
+    "items": [
+      {"name": "bay leaf, 1", "description": ""},
+      {"name": "breadcrumbs, 100 g", "description": ""},
+      {"name": "carrot, 2, sliced", "description": ""},
+      {"name": "chicken breast, 4, pounded to 1cm thickness", "description": ""},
+      {"name": "chicken stock, 600 ml", "description": ""},
+      {"name": "curry powder, 4 teaspoons", "description": ""},
+      {"name": "egg, 1, beaten", "description": ""},
+      {"name": "garam masala, 1 teaspoon", "description": ""},
+      {"name": "garlic cloves, 5, chopped", "description": ""},
+      {"name": "honey, 2 teaspoons", "description": ""},
+      {"name": "onions, 2, sliced", "description": ""},
+      {"name": "plain flour, 2 tablespoons (for coating chicken)", "description": ""},
+      {"name": "plain flour, 2 tablespoons (for curry sauce)", "description": ""},
+      {"name": "salt and pepper, to taste", "description": ""},
+      {"name": "soy sauce, 4 teaspoons", "description": ""},
+      {"name": "sunflower oil, 2 tablespoons", "description": ""},
+      {"name": "vegetable oil, 230 ml (for frying chicken)", "description": ""},
+      {"name": "white rice, for serving", "description": ""}
+    ],
+    "steps": [
+      "For the curry sauce: Heat sunflower oil in a medium non-stick saucepan, add sliced onion and chopped garlic, and cook until softened.",
+      "Stir in sliced carrots and cook over low heat for 10 to 12 minutes.",
+      "Add flour and curry powder; cook for 1 minute.",
+      "Gradually stir in chicken stock until combined; add honey, soy sauce, and bay leaf. Slowly bring to the boil.",
+      "Turn down heat and simmer for 20 minutes, or until the sauce thickens but is still of pouring consistency.",
+      "Stir in garam masala. Pour the curry sauce through a sieve, then return it to the saucepan and keep on low heat until ready to serve.",
+      "For the chicken: Season both sides of the chicken breasts with salt and pepper.",
+      "Place flour, beaten egg, and breadcrumbs in three separate bowls, arranged in a row.",
+      "Coat each chicken breast in flour, then dip into the egg, then coat in breadcrumbs, making sure both sides are covered.",
+      "Heat vegetable oil in a large frying pan over medium-high heat. Place the chicken into the hot oil and cook until golden brown, about 3 to 4 minutes per side.",
+      "Once cooked, place the chicken on kitchen paper to absorb excess oil.",
+      "Slice the chicken, pour the curry sauce over it, and serve with white rice."
+    ]
+  },
+  {
+    "id": 24,
+    "name": "Grilled Beef & Chicken Burgers with Corn-Herb Relish",
+    "description": "No oven needed — cooks entirely on a grill or stovetop skillet. Mild seasoning (Montreal steak seasoning), serves ~4-5 with leftovers. Great for hot summer days since it avoids heating up the oven.",
+    "tags": ["Grill", "No Oven", "Summer"],
+    "items": [
+      {"name": "Montreal steak seasoning", "description": "1.5-2 tbsp"},
+      {"name": "Olive oil", "description": "1 tbsp"},
+      {"name": "Salt", "description": "to taste"},
+      {"name": "black pepper", "description": "to taste"},
+      {"name": "chicken thighs, finely chopped", "description": "0.5 lb"},
+      {"name": "chives, chopped", "description": "2 tbsp"},
+      {"name": "green onions, thinly sliced", "description": "3"},
+      {"name": "ground chuck", "description": "1 lb"},
+      {"name": "leftover cooked corn", "description": "1.5 cups"},
+      {"name": "lime or lemon juice", "description": "1 tbsp"},
+      {"name": "olive oil (for relish)", "description": "1 tbsp"},
+      {"name": "parsley, chopped", "description": "2 tbsp"}
+    ],
+    "steps": [
+      "In a bowl, combine ground chuck, chopped chicken thigh, and Montreal seasoning. Mix gently just until combined — don't overwork it.",
+      "Form into 4-5 patties, about 3/4-inch thick.",
+      "Heat a grill or heavy skillet over medium-high heat with a little olive oil.",
+      "Cook patties 4-5 minutes per side, until internal temp reaches 165°F (since chicken is mixed in, cook to chicken's safe temp, not just beef's).",
+      "While patties cook, combine corn, green onions, chives, parsley, olive oil, and lime juice in a bowl. Season with salt and pepper to taste.",
+      "Rest burgers 2-3 minutes, then top generously with corn-herb relish. Serve with buns or over rice/greens."
+    ]
+  },
+  {
+    "id": 25,
+    "name": "Grilled Gochujang Shrimp or Chicken",
+    "description": "A flexible, weeknight-friendly Korean-inspired grilled protein. Works equally well with shrimp or chicken thighs — just adjust the marinating and grilling time. Spice level is kept mild thanks to honey balancing the gochujang; add extra gochujang or a pinch of chili flakes if you want more heat. Active work is about 20 minutes; marinating time is flexible (as little as 20 minutes for shrimp, up to overnight for chicken).",
+    "tags": ["Chicken", "Grill", "Korean", "Quick", "Seafood"],
+    "items": [
+      {"name": "Gochujang", "description": "1/4 cup"},
+      {"name": "Honey", "description": "2 tbsp"},
+      {"name": "Rice vinegar", "description": "1 tbsp"},
+      {"name": "Sesame oil", "description": "1 tbsp"},
+      {"name": "Soy sauce", "description": "2 tbsp"},
+      {"name": "fresh ginger, grated", "description": "1 tbsp"},
+      {"name": "garlic, minced", "description": "3 cloves"},
+      {"name": "large shrimp, peeled and deveined (or boneless skinless chicken thighs)", "description": "1-1.5 lb"},
+      {"name": "neutral oil, for grilling", "description": "to taste"},
+      {"name": "scallions, sliced (for garnish)", "description": "2"},
+      {"name": "toasted sesame seeds (for garnish)", "description": "1 tbsp"}
+    ],
+    "steps": [
+      "In a bowl, whisk together gochujang, soy sauce, honey, rice vinegar, sesame oil, garlic, and ginger until smooth.",
+      "Reserve about 2 tbsp of the marinade separately for basting/glazing later.",
+      "Add shrimp or chicken to the remaining marinade and toss to coat. Cover and refrigerate: 20-30 minutes for shrimp, 30 minutes to overnight for chicken.",
+      "Preheat grill or grill pan to medium-high heat and oil the grates.",
+      "Optional: thread shrimp onto skewers for easier flipping. Chicken can be grilled directly or skewered.",
+      "Grill shrimp 2-3 minutes per side until opaque and lightly charred. Grill chicken 5-7 minutes per side until internal temp reaches 165°F (74°C).",
+      "Brush the cooked protein with the reserved marinade during the last minute of grilling for a glossy glaze.",
+      "Remove from grill and let rest 2-3 minutes.",
+      "Garnish with sliced scallions and toasted sesame seeds before serving."
+    ]
+  }
+]
