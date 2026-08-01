@@ -16,6 +16,7 @@ by id in a recipe PATCH -- inline {"name": ...} dicts work for tags/categories
 but raise a server-side ValueError for foods/units (confirmed against a live
 v3.21.0 instance).
 """
+
 from __future__ import annotations
 
 import argparse
@@ -51,17 +52,37 @@ CATEGORY_TAGS = {"breakfast": "Breakfast", "technique": "Technique"}
 # equipment tags -> Mealie tools (kitchen.org/api/organizers/tools), a
 # separate facet from tags/categories -- these are physical equipment, not
 # descriptive/dietary/cuisine tags.
-TOOL_TAGS = {"cast iron": "Cast Iron", "grill": "Grill", "skillet": "Skillet", "wok": "Wok"}
+TOOL_TAGS = {
+    "cast iron": "Cast Iron",
+    "grill": "Grill",
+    "skillet": "Skillet",
+    "wok": "Wok",
+}
 
 # meal-type/course category, applied unconditionally per KO recipe id -- not
 # derivable from tags since KO has no "dinner"/"side"/"sauce" tag convention.
 # Recipes that get Breakfast via CATEGORY_TAGS (the "breakfast" KO tag) are
 # omitted here rather than duplicated.
 RECIPE_BASE_CATEGORY: dict[int, str] = {
-    6: "Dinner", 7: "Dinner", 8: "Dinner", 9: "Dinner", 10: "Dinner",
-    11: "Dinner", 12: "Sauce", 13: "Dinner", 14: "Dinner", 15: "Dinner",
-    16: "Dinner", 17: "Side", 18: "Dinner", 20: "Dinner", 21: "Dinner",
-    22: "Dinner", 23: "Dinner", 24: "Dinner", 25: "Dinner",
+    6: "Dinner",
+    7: "Dinner",
+    8: "Dinner",
+    9: "Dinner",
+    10: "Dinner",
+    11: "Dinner",
+    12: "Sauce",
+    13: "Dinner",
+    14: "Dinner",
+    15: "Dinner",
+    16: "Dinner",
+    17: "Side",
+    18: "Dinner",
+    20: "Dinner",
+    21: "Dinner",
+    22: "Dinner",
+    23: "Dinner",
+    24: "Dinner",
+    25: "Dinner",
 }
 
 # recipeServings per KO id -- explicit count stated by the recipe, or a
@@ -76,72 +97,123 @@ RECIPE_BASE_CATEGORY: dict[int, str] = {
 BREAKFAST_DEFAULT_SERVINGS = 1
 HOUSEHOLD_DEFAULT_SERVINGS = 4
 RECIPE_SERVINGS: dict[int, int] = {
-    6: 3,    # Pan Sauce Lesson -- description states "Serves 3"
-    11: 4,   # Grilled Salmon with Dill Chimichurri -- 4 fillets
-    12: 4,   # Chimichurri -- description states "4 servings"
-    13: 4,   # Canned Tuna Tostadas -- 4 tostadas
-    14: 4,   # Orecchiette w/ Fresh Corn Alfredo -- 12oz pasta box convention
-    16: 4,   # Cold Sesame Rice Noodles -- 12oz noodles, same convention
-    18: 4,   # Italian-American Meatballs -- ~16-18 meatballs, ~4/serving
-    19: 1,   # Overnight Oats -- single-jar prep
-    20: 3,   # Spice-Rubbed Chicken Thighs -- description states "dinner for 3"
-    23: 4,   # Katsu Chicken Curry -- 4 chicken breasts
-    24: 4,   # Grilled Beef & Chicken Burgers -- description states "~4-5"; 4-5 patties
+    6: 3,  # Pan Sauce Lesson -- description states "Serves 3"
+    11: 4,  # Grilled Salmon with Dill Chimichurri -- 4 fillets
+    12: 4,  # Chimichurri -- description states "4 servings"
+    13: 4,  # Canned Tuna Tostadas -- 4 tostadas
+    14: 4,  # Orecchiette w/ Fresh Corn Alfredo -- 12oz pasta box convention
+    16: 4,  # Cold Sesame Rice Noodles -- 12oz noodles, same convention
+    18: 4,  # Italian-American Meatballs -- ~16-18 meatballs, ~4/serving
+    19: 1,  # Overnight Oats -- single-jar prep
+    20: 3,  # Spice-Rubbed Chicken Thighs -- description states "dinner for 3"
+    23: 4,  # Katsu Chicken Curry -- 4 chicken breasts
+    24: 4,  # Grilled Beef & Chicken Burgers -- description states "~4-5"; 4-5 patties
 }
 
 UNIT_ALIASES = {
-    "tbsp": "tablespoon", "tablespoons": "tablespoon", "tablespoon": "tablespoon",
-    "tsp": "teaspoon", "teaspoons": "teaspoon", "teaspoon": "teaspoon",
-    "cup": "cup", "cups": "cup",
-    "lb": "pound", "lbs": "pound", "pound": "pound", "pounds": "pound",
-    "oz": "ounce", "ounces": "ounce", "ounce": "ounce",
-    "g": "gram", "gram": "gram", "grams": "gram",
-    "ml": "milliliter", "clove": "clove", "cloves": "clove",
-    "sprig": "sprig", "sprigs": "sprig",
+    "tbsp": "tablespoon",
+    "tablespoons": "tablespoon",
+    "tablespoon": "tablespoon",
+    "tsp": "teaspoon",
+    "teaspoons": "teaspoon",
+    "teaspoon": "teaspoon",
+    "cup": "cup",
+    "cups": "cup",
+    "lb": "pound",
+    "lbs": "pound",
+    "pound": "pound",
+    "pounds": "pound",
+    "oz": "ounce",
+    "ounces": "ounce",
+    "ounce": "ounce",
+    "g": "gram",
+    "gram": "gram",
+    "grams": "gram",
+    "ml": "milliliter",
+    "clove": "clove",
+    "cloves": "clove",
+    "sprig": "sprig",
+    "sprigs": "sprig",
 }
 
 # (name, amount, unit, note) tuples -- hand-parsed from KO free text, keyed by
 # KO recipe id + item name. Anything not listed here falls back to a bare
 # qty=0/no-unit ingredient with the original KO name preserved as the food name.
 INGREDIENT_OVERRIDES: dict[int, dict[str, tuple[float, str | None, str]]] = {
-    1: {"Eggs": (2, None, "")},   # Scrambled Eggs -- KO gave no count; 2 eggs is the standard single serving
-    2: {"Eggs": (2, None, "")},   # Fried Eggs -- same
-    3: {"Eggs": (2, None, "")},   # Hard Boiled Eggs -- same
-    4: {"Eggs": (2, None, "")},   # Classic Omelet -- steps already say "Whisk 2 eggs"
+    1: {
+        "Eggs": (2, None, "")
+    },  # Scrambled Eggs -- KO gave no count; 2 eggs is the standard single serving
+    2: {"Eggs": (2, None, "")},  # Fried Eggs -- same
+    3: {"Eggs": (2, None, "")},  # Hard Boiled Eggs -- same
+    4: {"Eggs": (2, None, "")},  # Classic Omelet -- steps already say "Whisk 2 eggs"
     5: {
         "eggs (2 per person)": (2, None, "2 per person"),
         "bread or toast (optional, for serving)": (0, None, "optional, for serving"),
         "fresh herbs (optional garnish)": (0, None, "optional garnish"),
     },
     6: {
-        "Earth Balance or Miyoko's butter (2 tbsp) — dairy-free, works identically to butter here":
-            (2, "tbsp", "Earth Balance or Miyoko's butter — dairy-free, works identically to butter"),
-        "boneless skinless chicken thighs (about 1.5 lb)": (1.5, "lb", "boneless skinless chicken thighs"),
-        "fresh parsley, chopped (for garnish)": (0, None, "fresh parsley, chopped, for garnish"),
-        "fresh thyme (3–4 sprigs, or 1/2 tsp dried)": (3, "sprig", "fresh thyme (3-4 sprigs, or 1/2 tsp dried)"),
+        "Earth Balance or Miyoko's butter (2 tbsp) — dairy-free, works identically to butter here": (
+            2,
+            "tbsp",
+            "Earth Balance or Miyoko's butter — dairy-free, works identically to butter",
+        ),
+        "boneless skinless chicken thighs (about 1.5 lb)": (
+            1.5,
+            "lb",
+            "boneless skinless chicken thighs",
+        ),
+        "fresh parsley, chopped (for garnish)": (
+            0,
+            None,
+            "fresh parsley, chopped, for garnish",
+        ),
+        "fresh thyme (3–4 sprigs, or 1/2 tsp dried)": (
+            3,
+            "sprig",
+            "fresh thyme (3-4 sprigs, or 1/2 tsp dried)",
+        ),
         "garlic cloves, minced (3 cloves)": (3, "clove", "garlic, minced"),
-        "lemon juice (1 tbsp, about half a lemon)": (1, "tbsp", "lemon juice (about half a lemon)"),
+        "lemon juice (1 tbsp, about half a lemon)": (
+            1,
+            "tbsp",
+            "lemon juice (about half a lemon)",
+        ),
         "low-sodium chicken broth (3/4 cup)": (0.75, "cup", "low-sodium chicken broth"),
         "olive oil (1 tbsp)": (1, "tbsp", "olive oil"),
     },
     25: {
         "fresh ginger, grated": (1, "tbsp", "fresh ginger, grated"),
         "garlic, minced": (3, "clove", "garlic, minced"),
-        "large shrimp, peeled and deveined (or boneless skinless chicken thighs)":
-            (1, "lb", "1-1.5 lb, peeled and deveined (or boneless skinless chicken thighs)"),
+        "large shrimp, peeled and deveined (or boneless skinless chicken thighs)": (
+            1,
+            "lb",
+            "1-1.5 lb, peeled and deveined (or boneless skinless chicken thighs)",
+        ),
         "neutral oil, for grilling": (0, None, "neutral oil, for grilling, to taste"),
         "scallions, sliced (for garnish)": (2, None, "scallions, sliced, for garnish"),
-        "toasted sesame seeds (for garnish)": (1, "tbsp", "toasted sesame seeds, for garnish"),
+        "toasted sesame seeds (for garnish)": (
+            1,
+            "tbsp",
+            "toasted sesame seeds, for garnish",
+        ),
     },
     9: {
         "egg (for egg wash, optional)": (0, None, "for egg wash, optional"),
         "flour (2 tbsp for thickening)": (2, "tbsp", "for thickening"),
         "frozen puff pastry (1 sheet)": (1, None, "1 sheet"),
-        "oat milk or coconut cream (dairy-free swap for heavy cream)": (0, None, "dairy-free swap for heavy cream"),
+        "oat milk or coconut cream (dairy-free swap for heavy cream)": (
+            0,
+            None,
+            "dairy-free swap for heavy cream",
+        ),
     },
     11: {
         "vegetable oil (for grill)": (0, None, "for grill"),
-        "skin-on salmon fillets": (4, None, "4 skin-on, 6-8 oz fillets, pin bones removed"),
+        "skin-on salmon fillets": (
+            4,
+            None,
+            "4 skin-on, 6-8 oz fillets, pin bones removed",
+        ),
     },
     12: {
         "fresh oregano (optional)": (0, None, "optional"),
@@ -159,7 +231,11 @@ INGREDIENT_OVERRIDES: dict[int, dict[str, tuple[float, str | None, str]]] = {
     },
     19: {
         "milk (or plant milk)": (0, None, "or plant milk"),
-        "mix-ins of choice (fruit, nut butter, spices, nuts)": (0, None, "fruit, nut butter, spices, nuts"),
+        "mix-ins of choice (fruit, nut butter, spices, nuts)": (
+            0,
+            None,
+            "fruit, nut butter, spices, nuts",
+        ),
     },
     20: {
         "Chicken thighs": (9, None, "8-10 chicken thighs"),
@@ -174,13 +250,25 @@ _CHINESE_MINCE_OVERRIDES = {
     "bell pepper, diced (optional)": (0, None, "diced, optional"),
     "carrots, diced or julienned (optional)": (0, None, "diced or julienned, optional"),
     "celery, diced (optional)": (0, None, "diced, optional"),
-    "cooked lo mein or thin egg noodles, 8 oz (optional, for noodle variation)": (8, "oz", "optional, for noodle variation"),
+    "cooked lo mein or thin egg noodles, 8 oz (optional, for noodle variation)": (
+        8,
+        "oz",
+        "optional, for noodle variation",
+    ),
     "cornstarch, 1 tsp, mixed with 2 tbsp water": (1, "tsp", "mixed with 2 tbsp water"),
-    "dark soy sauce or hoisin sauce (optional, for extra savory depth), 1 tsp": (1, "tsp", "optional, for extra savory depth"),
+    "dark soy sauce or hoisin sauce (optional, for extra savory depth), 1 tsp": (
+        1,
+        "tsp",
+        "optional, for extra savory depth",
+    ),
     "fresh ginger, 1 tbsp, minced": (1, "tbsp", "minced"),
     "frozen peas (optional), 1/2 cup": (0.5, "cup", "optional"),
     "garlic, 2 to 3 cloves, minced": (2, "clove", "2 to 3 cloves, minced"),
-    "green onions (scallions), 4 to 6, sliced, white and green parts separated": (4, None, "4 to 6, sliced, white and green parts separated"),
+    "green onions (scallions), 4 to 6, sliced, white and green parts separated": (
+        4,
+        None,
+        "4 to 6, sliced, white and green parts separated",
+    ),
     "ground beef, 1 lb": (1, "lb", ""),
     "mushrooms, sliced (optional)": (0, None, "sliced, optional"),
     "neutral oil (vegetable or peanut), 2 tbsp": (2, "tbsp", "vegetable or peanut"),
@@ -199,7 +287,11 @@ INGREDIENT_OVERRIDES[23] = {
     "bay leaf, 1": (1, None, ""),
     "breadcrumbs, 100 g": (100, "g", ""),
     "carrot, 2, sliced": (2, None, "sliced"),
-    "chicken breast, 4, pounded to 1cm thickness": (4, None, "pounded to 1cm thickness"),
+    "chicken breast, 4, pounded to 1cm thickness": (
+        4,
+        None,
+        "pounded to 1cm thickness",
+    ),
     "chicken stock, 600 ml": (600, "ml", ""),
     "curry powder, 4 teaspoons": (4, "tsp", ""),
     "egg, 1, beaten": (1, None, "beaten"),
@@ -207,7 +299,11 @@ INGREDIENT_OVERRIDES[23] = {
     "garlic cloves, 5, chopped": (5, "clove", "chopped"),
     "honey, 2 teaspoons": (2, "tsp", ""),
     "onions, 2, sliced": (2, None, "sliced"),
-    "plain flour, 2 tablespoons (for coating chicken)": (2, "tbsp", "for coating chicken"),
+    "plain flour, 2 tablespoons (for coating chicken)": (
+        2,
+        "tbsp",
+        "for coating chicken",
+    ),
     "plain flour, 2 tablespoons (for curry sauce)": (2, "tbsp", "for curry sauce"),
     "salt and pepper, to taste": (0, None, "to taste"),
     "soy sauce, 4 teaspoons": (4, "tsp", ""),
@@ -242,7 +338,14 @@ class MealieClient:
         self._unit_cache: dict[str, dict] = {}
         self._tool_cache: dict[str, dict] = {}
 
-    def _get_or_create(self, cache: dict, list_path: str, create_path: str, name: str, extra: dict | None = None) -> dict:
+    def _get_or_create(
+        self,
+        cache: dict,
+        list_path: str,
+        create_path: str,
+        name: str,
+        extra: dict | None = None,
+    ) -> dict:
         key = name.strip().lower()
         if key in cache:
             return cache[key]
@@ -262,22 +365,33 @@ class MealieClient:
         return item
 
     def get_or_create_tag(self, name: str) -> dict:
-        return self._get_or_create(self._tag_cache, "/api/organizers/tags", "/api/organizers/tags", name)
+        return self._get_or_create(
+            self._tag_cache, "/api/organizers/tags", "/api/organizers/tags", name
+        )
 
     def get_or_create_category(self, name: str) -> dict:
-        return self._get_or_create(self._category_cache, "/api/organizers/categories", "/api/organizers/categories", name)
+        return self._get_or_create(
+            self._category_cache,
+            "/api/organizers/categories",
+            "/api/organizers/categories",
+            name,
+        )
 
     def get_or_create_food(self, name: str) -> dict:
         return self._get_or_create(self._food_cache, "/api/foods", "/api/foods", name)
 
     def get_or_create_unit(self, name: str) -> dict:
         abbrev = "".join(w[0] for w in name.split()) if len(name) > 8 else name
-        return self._get_or_create(self._unit_cache, "/api/units", "/api/units", name, {"abbreviation": abbrev})
+        return self._get_or_create(
+            self._unit_cache, "/api/units", "/api/units", name, {"abbreviation": abbrev}
+        )
 
     def get_or_create_tool(self, name: str) -> dict:
         # like foods/units (not tags/categories) -- must be pre-created and
         # referenced by id, an inline {"name": ...} dict is silently dropped.
-        return self._get_or_create(self._tool_cache, "/api/organizers/tools", "/api/organizers/tools", name)
+        return self._get_or_create(
+            self._tool_cache, "/api/organizers/tools", "/api/organizers/tools", name
+        )
 
     def create_recipe_stub(self, name: str) -> str:
         r = self.http.post("/api/recipes", json={"name": name})
@@ -306,7 +420,11 @@ def build_ingredient(client: MealieClient, ko_id: int, item: dict) -> dict:
             m = re.match(r"^([\d./]+)\s*(\D*)$", ko_desc)
             if m and m.group(1):
                 try:
-                    qty = eval(m.group(1), {"__builtins__": {}}) if "/" in m.group(1) else float(m.group(1))
+                    qty = (
+                        eval(m.group(1), {"__builtins__": {}})
+                        if "/" in m.group(1)
+                        else float(m.group(1))
+                    )
                 except Exception:
                     pass
         food_name = re.sub(r"\s*\([^)]*\)", "", name).split(",")[0].strip() or name
@@ -315,7 +433,11 @@ def build_ingredient(client: MealieClient, ko_id: int, item: dict) -> dict:
         qty, unit_name = 0.0, None
         if m and m.group(1):
             try:
-                qty = eval(m.group(1), {"__builtins__": {}}) if "/" in m.group(1) else float(m.group(1))
+                qty = (
+                    eval(m.group(1), {"__builtins__": {}})
+                    if "/" in m.group(1)
+                    else float(m.group(1))
+                )
             except Exception:
                 qty = 0.0
             if m.group(2):
@@ -358,14 +480,18 @@ def build_tags_and_categories(
             cat_name = CATEGORY_TAGS[key]
             if cat_name not in seen_cats:
                 cat = client.get_or_create_category(cat_name)
-                categories.append({"id": cat["id"], "name": cat["name"], "slug": cat["slug"]})
+                categories.append(
+                    {"id": cat["id"], "name": cat["name"], "slug": cat["slug"]}
+                )
                 seen_cats.add(cat_name)
             continue
         if key in TOOL_TAGS:
             tool_name = TOOL_TAGS[key]
             if tool_name not in seen_tools:
                 tool = client.get_or_create_tool(tool_name)
-                tools.append({"id": tool["id"], "name": tool["name"], "slug": tool["slug"]})
+                tools.append(
+                    {"id": tool["id"], "name": tool["name"], "slug": tool["slug"]}
+                )
                 seen_tools.add(tool_name)
             continue
         mapped = TAG_MAP.get(key, t)
@@ -385,7 +511,9 @@ def migrate_recipe(client: MealieClient, ko: dict, dry_run: bool) -> None:
     print(f"[{ko_id}] {name} -> slug={slug}")
 
     ingredients = [build_ingredient(client, ko_id, item) for item in ko["items"]]
-    tags, categories, tools = build_tags_and_categories(client, ko_id, ko.get("tags", []))
+    tags, categories, tools = build_tags_and_categories(
+        client, ko_id, ko.get("tags", [])
+    )
     instructions = [{"text": s} for s in ko.get("steps", [])]
 
     if ko_id in RECIPE_SERVINGS:
@@ -415,15 +543,23 @@ def migrate_recipe(client: MealieClient, ko: dict, dry_run: bool) -> None:
     if not client.recipe_exists(slug):
         client.create_recipe_stub(name)
     client.update_recipe(slug, payload)
-    print(f"  -> pushed ({len(ingredients)} ingredients, {len(instructions)} steps, "
-          f"{len(tags)} tags, {len(categories)} categories, {len(tools)} tools)")
+    print(
+        f"  -> pushed ({len(ingredients)} ingredients, {len(instructions)} steps, "
+        f"{len(tags)} tags, {len(categories)} categories, {len(tools)} tools)"
+    )
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--limit", type=int, default=None, help="only migrate the first N recipes")
-    ap.add_argument("--only", type=str, default=None, help="comma-separated KO recipe ids")
-    ap.add_argument("--dry-run", action="store_true", help="print payloads, don't call Mealie")
+    ap.add_argument(
+        "--limit", type=int, default=None, help="only migrate the first N recipes"
+    )
+    ap.add_argument(
+        "--only", type=str, default=None, help="comma-separated KO recipe ids"
+    )
+    ap.add_argument(
+        "--dry-run", action="store_true", help="print payloads, don't call Mealie"
+    )
     args = ap.parse_args()
 
     base_url = os.environ["MEALIE_BASE_URL"]
