@@ -42,8 +42,16 @@ TAG_MAP = {
     "temporary": None,
     "breakfast": None,  # promoted to category instead, see CATEGORY_TAGS
     "technique": None,  # promoted to category instead, see CATEGORY_TAGS
+    # cast iron/grill/skillet/wok are intercepted by TOOL_TAGS before this
+    # map is consulted -- not listed here since that branch never falls
+    # through to TAG_MAP for those keys.
 }
 CATEGORY_TAGS = {"breakfast": "Breakfast", "technique": "Technique"}
+
+# equipment tags -> Mealie tools (kitchen.org/api/organizers/tools), a
+# separate facet from tags/categories -- these are physical equipment, not
+# descriptive/dietary/cuisine tags.
+TOOL_TAGS = {"cast iron": "Cast Iron", "grill": "Grill", "skillet": "Skillet", "wok": "Wok"}
 
 # meal-type/course category, applied unconditionally per KO recipe id -- not
 # derivable from tags since KO has no "dinner"/"side"/"sauce" tag convention.
@@ -232,6 +240,7 @@ class MealieClient:
         self._category_cache: dict[str, dict] = {}
         self._food_cache: dict[str, dict] = {}
         self._unit_cache: dict[str, dict] = {}
+        self._tool_cache: dict[str, dict] = {}
 
     def _get_or_create(self, cache: dict, list_path: str, create_path: str, name: str, extra: dict | None = None) -> dict:
         key = name.strip().lower()
@@ -264,6 +273,11 @@ class MealieClient:
     def get_or_create_unit(self, name: str) -> dict:
         abbrev = "".join(w[0] for w in name.split()) if len(name) > 8 else name
         return self._get_or_create(self._unit_cache, "/api/units", "/api/units", name, {"abbreviation": abbrev})
+
+    def get_or_create_tool(self, name: str) -> dict:
+        # like foods/units (not tags/categories) -- must be pre-created and
+        # referenced by id, an inline {"name": ...} dict is silently dropped.
+        return self._get_or_create(self._tool_cache, "/api/organizers/tools", "/api/organizers/tools", name)
 
     def create_recipe_stub(self, name: str) -> str:
         r = self.http.post("/api/recipes", json={"name": name})
@@ -326,8 +340,11 @@ def build_ingredient(client: MealieClient, ko_id: int, item: dict) -> dict:
     return ing
 
 
-def build_tags_and_categories(client: MealieClient, ko_id: int, ko_tags: list[str]) -> tuple[list[dict], list[dict]]:
-    tags, categories, seen_tags, seen_cats = [], [], set(), set()
+def build_tags_and_categories(
+    client: MealieClient, ko_id: int, ko_tags: list[str]
+) -> tuple[list[dict], list[dict], list[dict]]:
+    tags, categories, tools = [], [], []
+    seen_tags, seen_cats, seen_tools = set(), set(), set()
 
     base_cat_name = RECIPE_BASE_CATEGORY.get(ko_id)
     if base_cat_name:
@@ -344,6 +361,13 @@ def build_tags_and_categories(client: MealieClient, ko_id: int, ko_tags: list[st
                 categories.append({"id": cat["id"], "name": cat["name"], "slug": cat["slug"]})
                 seen_cats.add(cat_name)
             continue
+        if key in TOOL_TAGS:
+            tool_name = TOOL_TAGS[key]
+            if tool_name not in seen_tools:
+                tool = client.get_or_create_tool(tool_name)
+                tools.append({"id": tool["id"], "name": tool["name"], "slug": tool["slug"]})
+                seen_tools.add(tool_name)
+            continue
         mapped = TAG_MAP.get(key, t)
         if mapped is None:
             continue
@@ -351,7 +375,7 @@ def build_tags_and_categories(client: MealieClient, ko_id: int, ko_tags: list[st
             tag = client.get_or_create_tag(mapped)
             tags.append({"id": tag["id"], "name": tag["name"], "slug": tag["slug"]})
             seen_tags.add(mapped)
-    return tags, categories
+    return tags, categories, tools
 
 
 def migrate_recipe(client: MealieClient, ko: dict, dry_run: bool) -> None:
@@ -361,7 +385,7 @@ def migrate_recipe(client: MealieClient, ko: dict, dry_run: bool) -> None:
     print(f"[{ko_id}] {name} -> slug={slug}")
 
     ingredients = [build_ingredient(client, ko_id, item) for item in ko["items"]]
-    tags, categories = build_tags_and_categories(client, ko_id, ko.get("tags", []))
+    tags, categories, tools = build_tags_and_categories(client, ko_id, ko.get("tags", []))
     instructions = [{"text": s} for s in ko.get("steps", [])]
 
     if ko_id in RECIPE_SERVINGS:
@@ -375,6 +399,7 @@ def migrate_recipe(client: MealieClient, ko: dict, dry_run: bool) -> None:
         "description": ko.get("description") or "",
         "recipeCategory": categories,
         "tags": tags,
+        "tools": tools,
         "recipeIngredient": ingredients,
         "recipeInstructions": instructions,
         "recipeServings": servings,
@@ -391,7 +416,7 @@ def migrate_recipe(client: MealieClient, ko: dict, dry_run: bool) -> None:
         client.create_recipe_stub(name)
     client.update_recipe(slug, payload)
     print(f"  -> pushed ({len(ingredients)} ingredients, {len(instructions)} steps, "
-          f"{len(tags)} tags, {len(categories)} categories)")
+          f"{len(tags)} tags, {len(categories)} categories, {len(tools)} tools)")
 
 
 def main() -> None:
