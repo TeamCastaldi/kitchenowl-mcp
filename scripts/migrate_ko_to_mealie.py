@@ -24,9 +24,16 @@ import json
 import os
 import re
 import sys
+from fractions import Fraction
 from pathlib import Path
 
 import httpx
+
+
+def parse_qty(text: str) -> float:
+    """Parse a leading quantity like "1", "1.5", or "1/2" into a float."""
+    return float(Fraction(text)) if "/" in text else float(text)
+
 
 DATA_FILE = Path(__file__).parent / "ko_recipes_full.json"
 
@@ -134,6 +141,21 @@ UNIT_ALIASES = {
     "cloves": "clove",
     "sprig": "sprig",
     "sprigs": "sprig",
+}
+
+# canonical unit name (lowercased) -> correct abbreviation. First-letter
+# heuristics collide (tablespoon/teaspoon both -> "t"), so this is an
+# explicit table instead.
+UNIT_ABBREVIATIONS = {
+    "tablespoon": "tbsp",
+    "teaspoon": "tsp",
+    "cup": "cup",
+    "pound": "lb",
+    "ounce": "oz",
+    "gram": "g",
+    "milliliter": "ml",
+    "clove": "clove",
+    "sprig": "sprig",
 }
 
 # (name, amount, unit, note) tuples -- hand-parsed from KO free text, keyed by
@@ -338,6 +360,12 @@ class MealieClient:
         self._unit_cache: dict[str, dict] = {}
         self._tool_cache: dict[str, dict] = {}
 
+    def __enter__(self) -> MealieClient:
+        return self
+
+    def __exit__(self, *exc_info: object) -> None:
+        self.http.close()
+
     def _get_or_create(
         self,
         cache: dict,
@@ -381,9 +409,10 @@ class MealieClient:
         return self._get_or_create(self._food_cache, "/api/foods", "/api/foods", name)
 
     def get_or_create_unit(self, name: str) -> dict:
-        abbrev = "".join(w[0] for w in name.split()) if len(name) > 8 else name
+        abbrev = UNIT_ABBREVIATIONS.get(name.lower())
+        extra = {"abbreviation": abbrev} if abbrev else None
         return self._get_or_create(
-            self._unit_cache, "/api/units", "/api/units", name, {"abbreviation": abbrev}
+            self._unit_cache, "/api/units", "/api/units", name, extra
         )
 
     def get_or_create_tool(self, name: str) -> dict:
@@ -394,13 +423,24 @@ class MealieClient:
         )
 
     def create_recipe_stub(self, name: str) -> str:
+        # Mealie's create endpoint returns the new recipe's slug as a bare
+        # JSON string (confirmed against a live v3.21.0 instance) -- not an
+        # object, so there's no dict-shaped response to defend against here.
         r = self.http.post("/api/recipes", json={"name": name})
         r.raise_for_status()
-        return r.json().strip('"') if r.text.startswith('"') else r.json()
+        slug = r.json()
+        if not isinstance(slug, str):
+            raise RuntimeError(
+                f"expected a slug string from POST /api/recipes, got {slug!r}"
+            )
+        return slug
 
     def recipe_exists(self, slug: str) -> bool:
         r = self.http.get(f"/api/recipes/{slug}")
-        return r.status_code == 200
+        if r.status_code == 404:
+            return False
+        r.raise_for_status()
+        return True
 
     def update_recipe(self, slug: str, payload: dict) -> dict:
         r = self.http.patch(f"/api/recipes/{slug}", json=payload)
@@ -420,11 +460,7 @@ def build_ingredient(client: MealieClient, ko_id: int, item: dict) -> dict:
             m = re.match(r"^([\d./]+)\s*(\D*)$", ko_desc)
             if m and m.group(1):
                 try:
-                    qty = (
-                        eval(m.group(1), {"__builtins__": {}})
-                        if "/" in m.group(1)
-                        else float(m.group(1))
-                    )
+                    qty = parse_qty(m.group(1))
                 except Exception:
                     pass
         food_name = re.sub(r"\s*\([^)]*\)", "", name).split(",")[0].strip() or name
@@ -433,11 +469,7 @@ def build_ingredient(client: MealieClient, ko_id: int, item: dict) -> dict:
         qty, unit_name = 0.0, None
         if m and m.group(1):
             try:
-                qty = (
-                    eval(m.group(1), {"__builtins__": {}})
-                    if "/" in m.group(1)
-                    else float(m.group(1))
-                )
+                qty = parse_qty(m.group(1))
             except Exception:
                 qty = 0.0
             if m.group(2):
@@ -541,7 +573,7 @@ def migrate_recipe(client: MealieClient, ko: dict, dry_run: bool) -> None:
         return
 
     if not client.recipe_exists(slug):
-        client.create_recipe_stub(name)
+        slug = client.create_recipe_stub(name)
     client.update_recipe(slug, payload)
     print(
         f"  -> pushed ({len(ingredients)} ingredients, {len(instructions)} steps, "
@@ -572,9 +604,9 @@ def main() -> None:
     if args.limit:
         recipes = recipes[: args.limit]
 
-    client = MealieClient(base_url, api_key)
-    for ko in recipes:
-        migrate_recipe(client, ko, args.dry_run)
+    with MealieClient(base_url, api_key) as client:
+        for ko in recipes:
+            migrate_recipe(client, ko, args.dry_run)
 
 
 if __name__ == "__main__":
